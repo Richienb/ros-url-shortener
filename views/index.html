@@ -1,54 +1,55 @@
-<!-- This is a static file -->
-<!-- served from your routes in server.js -->
-
-<!-- You might want to try something fancier: -->
-<!-- html/nunjucks docs: https://mozilla.github.io/nunjucks/ -->
-<!-- pug: https://pugjs.org/ -->
-<!-- haml: http://haml.info/ -->
-<!-- hbs(handlebars): http://handlebarsjs.com/ -->
-
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Welcome to Glitch!</title>
-    <meta name="description" content="A cool thing made with Glitch">
-    <link id="favicon" rel="icon" href="https://glitch.com/edit/favicon-app.ico" type="image/x-icon">
+    <title>FCC URL shortener microservice</title>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   </head>
-  <body>
+  <body class="container">
     <header>
       <h1>
-        A Dream of the Future
+        FCC URL shortener microservice
       </h1>
     </header>
 
-    <main>
-      <p class="bold">Oh hi,</p>
-      <p>Tell me your hopes and dreams:</p>
-      <form>
-        <input type="text" maxlength="100" placeholder="Dreams!">
-        <button type="submit">Submit</button>
-      </form>
-      <section class="dreams">
-        <ul id="dreams">
-        </ul>
-      </section>
+    <main class="jumbotron" style="background-color: rgb(250,250,250);">
+      <h2>
+        User stories:
+      </h2>
+      <blockquote>
+          <p>
+            I can pass a URL as a parameter and I will receive a shortened URL in the JSON response.
+          </p>
+          <p>
+            When I visit that shortened URL, it will redirect me to my original link.
+          </p>     
+      </blockquote>
+      <h2>
+        Example creation usage:
+      </h2>
+      <pre>
+        https://shortener.glitch.me/new/https://www.google.com
+        https://shortener.glitch.me/new/http://foo.com:80
+      </pre>
+      <h2>
+        Example creation output:
+      </h2>
+      <pre>
+        { "original_url":"http://foo.com:80", "short_url":"https://shortener.glitch.me/8170" }
+      </pre>
     </main>
 
     <footer>
-      <a href="https://glitch.com">
-        Remix this in Glitch
-      </a>
+      <p>
+        <a href="https://glitch.com">
+          Remix this in Glitch
+        </a>        
+      </p>
+      <p>
+        <a href="https://github.com/barottomartin/fcc-timestamp-microservice">
+          Source code
+        </a>
+      </p>
     </footer>
-
-    <!-- Your web-app is https, so your scripts need to be too -->
-    <script src="https://code.jquery.com/jquery-2.2.1.min.js"
-            integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00="
-            crossorigin="anonymous"></script>
-    <script src="/client.js"></script>
-
   </body>
 </html>
