@@ -30,9 +30,8 @@ app.get("/new/*", function (request, response) {
     var nextVal = 0;
     db.collection('urls').find().sort({ value: -1}).limit(1).toArray(function(err, max){
       if (err) serverError(err, response);
-      console.log(max);
-      nextVal = max[0].value++;
-      console.log(nextVal);
+      
+      nextVal = max[0].value + 1;
       db.collection('urls').insert({ value: nextVal, original_url: request.params[0] }, function(err, data) {
         if (err) serverError(err, response);
 
