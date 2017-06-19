@@ -28,9 +28,10 @@ app.get("/new/:data", function (request, response) {
   client.connect(dbUrl, function (err, db) {
     if (err) serverError(err, response)
     
-    //Insert new document
-    //Check if it already exists: return the existing one
-    //Autoincrement?
+    db.collection('urls').insert({ value: 1, original_url: request.params.data }, function(err, data) {
+      if (err) serverError(err, response)
+      
+    });
     
     
   });
