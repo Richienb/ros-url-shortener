@@ -14,7 +14,7 @@ exports.list = function(){
         console.log(docs);
         result = docs;
         db.close();
-        
+        return result;
       });
     }
   });
