@@ -39,7 +39,7 @@ app.get("/new/:data", function (request, response) {
 app.get("/:data", function (request, response) {
   client.connect(dbUrl, function (err, db) {
     if (err) serverError(err, response)
-    if (isNaN(request.params.data)) { response.status(409).send('Invalid URL'); }
+    if (isNaN(request.params.data)) { response.status(400).send('Invalid URL'); }
     
     db.collection('urls').find({ id: parseInt(request.params.data) }).toArray(function(err, docs){
       if (err) serverError(err, response)
