@@ -12,7 +12,7 @@ app.get("/", function (request, response) {
 
 app.get("/list", function (request, response) {
   client.connect(dbUrl, function (err, db) {
-    if (err) serverError(err, response)
+    if (err) serverError(err, response);
     
     db.collection('urls').find({}).toArray(function(err, docs){
       if (err) serverError(err, response)
@@ -24,13 +24,17 @@ app.get("/list", function (request, response) {
   });
 });
 
-app.get("/new/:data", function (request, response) {
+app.get("/new/*", function (request, response) {
   client.connect(dbUrl, function (err, db) {
     if (err) serverError(err, response)
     
-    db.collection('urls').insert({ value: 1, original_url: request.params.data }, function(err, data) {
-      if (err) serverError(err, response)
+    db.collection('urls').find()
+    
+    db.collection('urls').insert({ value: 1, original_url: request.params[0] }, function(err, data) {
+      if (err) serverError(err, response);
       
+      response.status(201).send(data);
+      db.close();
     });
     
     
@@ -39,7 +43,7 @@ app.get("/new/:data", function (request, response) {
 
 app.get("/:data", function (request, response) {
   client.connect(dbUrl, function (err, db) {
-    if (err) serverError(err, response)
+    if (err) serverError(err, response);
     if (isNaN(request.params.data)) { response.status(400).send('Invalid URL'); }
     
     db.collection('urls').find({ id: parseInt(request.params.data) }).toArray(function(err, docs){
