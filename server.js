@@ -17,7 +17,9 @@ app.get("/new/*", function (request, response) {
     
     //If it already exists reuse the information
     db.collection('urls').find({ original_url: request.params[0]}).toArray(function(err, data){
-      
+      if (data.length > 0){
+        response.status(200).send({ original_url: data[0].original_url , short_url: base_url + data[0].value });
+      }
     });
     
     var nextVal = 0;
