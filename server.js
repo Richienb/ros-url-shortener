@@ -10,7 +10,9 @@ MongoClient.connect(dbUrl, function (err, db) {
     console.log('Unable to connect to the mongoDB server. Error:', err);
   } else {
     console.log('Connection established to', dbUrl);
-
+    
+    //collection called urls;
+    
     db.close();
   }
 });
