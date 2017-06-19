@@ -5,15 +5,18 @@ module.exports = exports = {}
 
 
 exports.list = function(){
+  var result = 'fruta';
   MongoClient.connect(dbUrl, function (err, db) {
     if (err) {
       console.log('Unable to connect to the mongoDB server. Error:', err);
     } else {
-      var urls = db.collection('urls');
-      var arr = urls.find({}).toArray(function(err, docs){
+      db.collection('urls').find({}).toArray(function(err, docs){
+        console.log(docs);
+        result = docs;
         db.close();
-        return docs;  
+        
       });
     }
-  });  
+  });
+  return result;
 }
