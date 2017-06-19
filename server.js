@@ -14,7 +14,7 @@ app.get("/list", function (request, response) {
   client.connect(dbUrl, function (err, db) {
     if (err) serverError(err, response);
     
-    db.collection('urls').find({}).toArray(function(err, docs){
+    db.collection('urls').find().toArray(function(err, docs){
       if (err) serverError(err, response)
       
       db.close();
@@ -27,17 +27,19 @@ app.get("/list", function (request, response) {
 app.get("/new/*", function (request, response) {
   client.connect(dbUrl, function (err, db) {
     if (err) serverError(err, response)
-    
-    db.collection('urls').find()
-    
-    db.collection('urls').insert({ value: 1, original_url: request.params[0] }, function(err, data) {
+    var nextVal = 0;
+    db.collection('urls').find().sort({ value: -1}).limit(1).toArray(function(err, max){
       if (err) serverError(err, response);
-      
-      response.status(201).send(data);
-      db.close();
+      console.log(max);
+      nextVal = max[0].value++;
+      console.log(nextVal);
+      db.collection('urls').insert({ value: nextVal, original_url: request.params[0] }, function(err, data) {
+        if (err) serverError(err, response);
+
+        response.status(201).send(data);
+        db.close();
+      });      
     });
-    
-    
   });
 });
 
