@@ -4,6 +4,7 @@ var mongodb = require('mongodb');
 var dbUrl = process.env.MONGOLAB_URI;
 var client = mongodb.MongoClient;
 var base_url = 'https://shortener.glitch.com/'
+var validUrl = require('valid-url');
 
 
 // http://expressjs.com/en/starter/basic-routing.html
@@ -14,14 +15,17 @@ app.get("/", function (request, response) {
 app.get("/new/*", function (request, response) {
   client.connect(dbUrl, function (err, db) {
     if (err) serverError(err, response)
-    
+    //Check provided URL
+    if (!validUrl.isWebUri(request.params[0])){
+      response.status(400).send('Invalid URL provided');
+    }
     //If it already exists reuse the information
     db.collection('urls').find({ original_url: request.params[0]}).toArray(function(err, data){
       if (data.length > 0){
         response.status(200).send({ original_url: data[0].original_url , short_url: base_url + data[0].value });
       }
-    });
-    
+    });/
+    //Store
     var nextVal = 0;
     db.collection('urls').find().sort({ value: -1}).limit(1).toArray(function(err, max){
       if (err) serverError(err, response);
@@ -42,12 +46,12 @@ app.get("/new/*", function (request, response) {
 app.get("/:data", function (request, response) {
   client.connect(dbUrl, function (err, db) {
     if (err) serverError(err, response);
-    if (isNaN(request.params.data)) { response.status(400).send('Invalid URL'); }
+    if (isNaN(request.params.data)) { response.status(400).send('Invalid short URL provided'); }
     
     db.collection('urls').find({ id: parseInt(request.params.data) }).toArray(function(err, docs){
       if (err) serverError(err, response)
       db.close();
-      response.redirect(docs[0].original_url);
+      //response.redirect(docs[0].original_url);
     });
     
   });
