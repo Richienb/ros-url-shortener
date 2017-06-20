@@ -36,19 +36,23 @@ app.get("/new/*", function (request, response) {
                     } else {
                       serverError(err, response);
                     }
+                    db.close();
                   });                  
                 } else {
                   serverError(err, response);
+                  db.close();
                 }
               });            
             }            
           } else {
             serverError(err, response);
+            db.close();
           } 
         });
       }
     } else {
       serverError(err, response);
+      db.close();
     }
     
   });
@@ -62,15 +66,16 @@ app.get("/:data(\\d+)/", function (request, response) {
           if (docs.length > 0){
             response.redirect(docs[0].original_url);
           } else{
-            response.send(404);
+            response.sendStatus(404);
           }       
         } else {
           serverError(err, response);
         }
+        db.close();
       });
-      db.close();
     } else {
       serverError(err, response);
+      db.close();
     }
   });
 });
