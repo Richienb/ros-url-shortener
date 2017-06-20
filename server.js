@@ -44,17 +44,23 @@ app.get("/new/*", function (request, response) {
 });
 
 app.get("/:data(\\d+)/", function (request, response) {
-  console.log('REDIRECT! ' + request.params.data)
   client.connect(dbUrl, function (err, db) {
-    if (err) serverError(err, response);
-    if (isNaN(request.params.data)) { response.status(400).send('Invalid short URL provided'); }
-    
-    db.collection('urls').find({ id: parseInt(request.params.data) }).toArray(function(err, docs){
-      if (err) serverError(err, response)
+    if (!err){
+      db.collection('urls').find({ value: parseInt(request.params.data) }).toArray(function(err, docs){
+        if (!err){
+          if (docs.length > 0){
+            response.redirect(docs[0].original_url);
+          } else{
+            response.send(404);
+          }       
+        } else {
+          serverError(err, response);
+        }
+      });
       db.close();
-      //response.redirect(docs[0].original_url);
-    });
-    
+    } else {
+      serverError(err, response);
+    }
   });
 });
 
