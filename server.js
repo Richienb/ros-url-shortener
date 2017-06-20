@@ -14,32 +14,40 @@ app.get("/", function (request, response) {
 
 app.get("/new/*", function (request, response) {
   client.connect(dbUrl, function (err, db) {
-    if (err) serverError(err, response)
-    //Check provided URL
-    if (!validUrl.isWebUri(request.params[0])){
-      return response.status(400).send('Invalid URL provided');
+    if (!err){
+      //Check provided URL
+      if (!validUrl.isWebUri(request.params[0])){
+        response.status(400).send('Invalid URL provided');
+      } else {
+        //If it already exists reuse the information
+        db.collection('urls').find({ original_url: request.params[0]}).toArray(function(err, data){
+          if (data.length > 0){
+            return response.status(200).send({ original_url: data[0].original_url , short_url: base_url + data[0].value });
+          } else {
+            //Store
+            var nextVal = 0;
+            db.collection('urls').find().sort({ value: -1}).limit(1).toArray(function(err, max){
+              if (!err){
+                if (max.length > 0){
+                  nextVal = max[0].value + 1;  
+                }
+                db.collection('urls').insert({ value: nextVal, original_url: request.params[0] }, function(err, data) {
+                  if (!err){
+                    response.status(200).send({ original_url: data.ops[0].original_url , short_url: base_url + data.ops[0].value });
+                  } else {
+                    server
+                  }
+                });                  
+              }
+            });            
+          }
+        });
+
+      }
+    } else {
+      serverError(err, response);
     }
-    //If it already exists reuse the information
-    db.collection('urls').find({ original_url: request.params[0]}).toArray(function(err, data){
-      if (data.length > 0){
-        return response.status(200).send({ original_url: data[0].original_url , short_url: base_url + data[0].value });
-      }
-    });
-    //Store
-    var nextVal = 0;
-    db.collection('urls').find().sort({ value: -1}).limit(1).toArray(function(err, max){
-      if (err) return serverError(err, response);
-      
-      if (max.length > 0){
-        nextVal = max[0].value + 1;  
-      }
-      db.collection('urls').insert({ value: nextVal, original_url: request.params[0] }, function(err, data) {
-        if (err) return serverError(err, response);
-        
-        response.status(200).send({ original_url: data.ops[0].original_url , short_url: base_url + data.ops[0].value });
-        db.close();
-      });      
-    });
+    db.close();
   });
 });
 
