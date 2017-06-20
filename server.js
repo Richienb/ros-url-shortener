@@ -17,33 +17,34 @@ app.get("/new/*", function (request, response) {
     if (err) serverError(err, response)
     //Check provided URL
     if (!validUrl.isWebUri(request.params[0])){
-      response.status(400).send('Invalid URL provided');
+      return response.status(400).send('Invalid URL provided');
     }
     //If it already exists reuse the information
     db.collection('urls').find({ original_url: request.params[0]}).toArray(function(err, data){
       if (data.length > 0){
-        response.status(200).send({ original_url: data[0].original_url , short_url: base_url + data[0].value });
+        return response.status(200).send({ original_url: data[0].original_url , short_url: base_url + data[0].value });
       }
-    });/
+    });
     //Store
     var nextVal = 0;
     db.collection('urls').find().sort({ value: -1}).limit(1).toArray(function(err, max){
-      if (err) serverError(err, response);
+      if (err) return serverError(err, response);
       
       if (max.length > 0){
         nextVal = max[0].value + 1;  
       }
       db.collection('urls').insert({ value: nextVal, original_url: request.params[0] }, function(err, data) {
-        if (err) serverError(err, response);
+        if (err) return serverError(err, response);
         
-        response.status(201).send({ original_url: data.ops[0].original_url , short_url: base_url + data.ops[0].value });
+        response.status(200).send({ original_url: data.ops[0].original_url , short_url: base_url + data.ops[0].value });
         db.close();
       });      
     });
   });
 });
 
-app.get("/:data", function (request, response) {
+app.get("/:data(\\d+)/", function (request, response) {
+  console.log('REDIRECT! ' + request.params.data)
   client.connect(dbUrl, function (err, db) {
     if (err) serverError(err, response);
     if (isNaN(request.params.data)) { response.status(400).send('Invalid short URL provided'); }
