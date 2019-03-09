@@ -1,19 +1,33 @@
-var express = require('express');
+var express = require("express");
 var app = express();
-var mongodb = require('mongodb');
+var mongodb = require("mongodb");
 var dbUrl = process.env.MONGOLAB_URI;
-console.log(process.env.MONGOLAB_URI)
 var client = mongodb.MongoClient;
-var base_url = 'https://ros-url-shortener.glitch.com/'
-var validUrl = require('valid-url');
+var base_url = "https://ros-url-shortener.glitch.com/"
+var validUrl = require("valid-url");
 
-app.get("/", function(request, response) {
-    response.sendFile(__dirname + '/views/index.html');
+app.get("/", (_request, response) => {
+    response.sendFile("index.html");
 });
 
-app.get("/new/*", function(request, response) {
+app.get("/new/*", (request, response) => {
+  if (!validUrl.isWebUri(request.params[0])) {
+                response.status(400).send('Invalid URL provided');
+  } else {
+    
+  }
+    const MongoClient = mongodb.MongoClient;
+    const client = new MongoClient(dbUrl, {
+        useNewUrlParser: true
+    });
+  
+    client.connect(err => {
+        const collection = client.db("urls").collection("devices");
+        // perform actions on the collection object
+        client.close();
+    });
     client.connect(dbUrl, function(err, db) {
-      console.log(err)
+        console.log(err)
         if (!err) {
             //Check provided URL
             if (!validUrl.isWebUri(request.params[0])) {
