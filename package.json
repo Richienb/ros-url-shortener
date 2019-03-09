@@ -1,22 +1,22 @@
 {
-  "name": "fcc-shortener",
+  "name": "ros-url-shortener",
   "version": "0.0.1",
-  "description": "FCC URL shortener ",
+  "description": "Just another URL shortener.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
-    "express": "^4.15.3",
-    "mongodb": "^2.2.28",
-    "valid-url": "^1.0.9"
+    "express": "^4.x.x",
+    "mongodb": "^3.x.x",
+    "valid-url": "^1.x.x"
   },
   "engines": {
-    "node": "8.1.x"
+    "node": "10.x.x"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/barottomartin/fcc-shortener"
+    "url": "https://github.com/Richienb/ros-url-shortener"
   },
   "license": "MIT",
   "keywords": [
