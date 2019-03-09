@@ -15,7 +15,7 @@ app.get("/new/*", (request, response) => {
         response.status(400).send('Invalid URL provided');
     } else {
         const MongoClient = mongodb.MongoClient;
-        const client = new MongoClient(dbUrl, {
+        const client = new MongoClient(process.env.MONGOLAB_URI, {
             useNewUrlParser: true
         });
 
