@@ -7,9 +7,9 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "express": "^4.x.x",
-    "mongodb": "^3.x.x",
-    "valid-url": "^1.x.x"
+    "express": "^4.16.4",
+    "mongodb": "^2.2.34",
+    "valid-url": "^1.0.9"
   },
   "engines": {
     "node": "10.x.x"
