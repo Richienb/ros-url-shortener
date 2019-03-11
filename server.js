@@ -10,49 +10,34 @@ const requestParams = (url, body) => {
         url: url,
         json: true,
         gzip: true,
-        method: method,
+        method: body ? "POST" : "GET",
+        body: body,
         headers: {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.80 Safari/537.36"
         }
     }
 }
 
-request(requestParams(endpoint), (err, _, body) => {
-    if (err) {
-        throw err
-    }
-
-    console.log(body)
-})
-
 app.get("/", (_request, response) => {
     response.sendFile(path.join(__dirname, "index.html"));
 });
 
 // Match creation request
-app.get("/new/*", (request, response) => {
+app.get("/new/*", (_request, response) => {
 
 });
 
 // Match lookup request
 app.get("/[0-9]+", (request, response) => {
-    https.get({
-        host: endpoint,
-        headers: {
-            'Content-Type': "application/json"
+    request(requestParams(endpoint), (err, _, body) => {
+        if (err) {
+            throw err
         }
-    }, (res) => {
-        let data = ""
 
-        res.on('data', (d) => {
-            process.stdout.write(d);
-        });
-
-        res.on('end')
-
-    }).on('error', (e) => {
-        console.error(e);
-    });
+        if (Object.keys(body).includes(request.path.substr(1))) {
+          
+        }
+    })
 });
 
 function serverError(err, response) {
