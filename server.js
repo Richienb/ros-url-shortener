@@ -3,6 +3,7 @@ const app = express()
 const path = require("path")
 const https = require("https")
 const endpoint = process.env.ENDPOINT
+const origin = "https://ros-url-shortener.glitch.me/"
 const request = require("request")
 const isurl = require("is-url")
 
@@ -26,24 +27,41 @@ app.get("/", (_req, res) => {
 // Match creation request
 app.get("/new/*", (req, res) => {
     request(requestParams(endpoint), (err, _, body) => {
-        if (err) {
-            res.status()
-        }
+        if (err) res.status(502).json({
+            "success": false,
+            "message": "Unable to contact storage endpoint."
+        })
 
         if (isurl(req.path.substr(5))) {
             if (Object.values(body).includes(req.path.substr(5))) {
                 res.json({
                     "success": true,
-                    url: body.find((el) => {
+                    "url": body.find((el) => {
                         return el === req.path.substr(5)
                     })
                 })
             } else {
                 body[Object.keys(body).length + 1] = req.path.substr(5)
-                request(requestParams(endpoint, body), (err2, body2) => {
-
+                request(requestParams(endpoint, body), (errb, bodyb) => {
+                    if (errb) res.status(502).json({
+                        "success": false,
+                        "message": "Unable to contact storage endpoint."
+                    })
+                    if (bodyb.ok === false) res.status(502).json({
+                        "success": false,
+                        "message": "The storage endpoint returned an error."
+                    })
+                    res.json({
+                        "success": true,
+                        "url": origin + Object.keys(body).length + 1
+                    })
                 })
             }
+        } else {
+            res.status(400).json({
+                "success": false,
+                "message": "String provided is not a URL."
+            })
         }
 
 
@@ -53,20 +71,16 @@ app.get("/new/*", (req, res) => {
 // Match lookup request
 app.get("/[0-9]+", (req, res) => {
     request(requestParams(endpoint), (err, _, body) => {
-        if (err) {
-            throw err
-        }
+        if (err) res.status(502).json({
+            "success": false,
+            "message": "Unable to contact storage endpoint."
+        })
 
         if (Object.keys(body).includes(req.path.substr(1))) {
             res.redirect(body[req.path.substr(1)])
         }
     })
 });
-
-function serverError(err, res) {
-    console.error(err);
-    res.sendStatus(500);
-}
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function() {
