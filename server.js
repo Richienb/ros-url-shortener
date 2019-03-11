@@ -32,7 +32,7 @@ app.get("/new/*", (req, res) => {
     request(requestParams(endpoint), (err, _, body) => {
         if (err) res.status(502).json({
             "success": false,
-            "message": "Unable to contact storage endpoint."
+            "message": "Unable to contact the storage endpoint."
         })
 
         if (isurl(req.path.substr(5))) {
@@ -53,7 +53,7 @@ app.get("/new/*", (req, res) => {
                 request(requestParams(endpoint, body), (errb, bodyb) => {
                     if (errb) res.status(502).json({
                         "success": false,
-                        "message": "Unable to contact storage endpoint."
+                        "message": "Unable to contact the storage endpoint."
                     })
                     if (bodyb.ok === false) res.status(502).json({
                         "success": false,
@@ -79,16 +79,40 @@ app.get("/new/*", (req, res) => {
 });
 
 // Match lookup request
+app.get("/get/*", (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    request(requestParams(endpoint), (err, _, body) => {
+        if (err) res.status(502).json({
+            "success": false,
+            "message": "Unable to contact the storage endpoint."
+        })
+
+        if (Object.keys(body.result).includes(req.path.substr(1))) {
+            res.json({
+                "success": true,
+                "url": body.result[req.path.substr(1)]
+            })
+        } else {
+            res.status(404).json({
+                "success": false,
+                "message": "No match found for short URL!"
+            })
+        }
+    })
+})
+
+// Match navigation request
 app.get("/[0-9]+", (req, res) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     request(requestParams(endpoint), (err, _, body) => {
-        if (err) res.status(502).send("Unable to contact storage endpoint.")
+        if (err) res.status(502).send("Unable to contact the storage endpoint.")
 
         if (Object.keys(body.result).includes(req.path.substr(1))) {
             res.redirect(body.result[req.path.substr(1)])
         } else {
-            res.status(404).send("Short URL not found.")
+            res.status(404).send("No match found for short URL!")
         }
     })
 });
