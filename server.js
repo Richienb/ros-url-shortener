@@ -33,9 +33,11 @@ app.get("/new/*", (req, res) => {
         })
 
         if (isurl(req.path.substr(5))) {
+          console.log(Object.values(body))
             if (Object.values(body).includes(req.path.substr(5))) {
                 res.json({
                     "success": true,
+                    "new": false,
                     "url": body.find((el) => {
                         return el === req.path.substr(5)
                     })
@@ -53,6 +55,7 @@ app.get("/new/*", (req, res) => {
                     })
                     res.json({
                         "success": true,
+                        "new": true,
                         "url": origin + Object.keys(body).length + 1
                     })
                 })
