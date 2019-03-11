@@ -35,7 +35,7 @@ app.get("/[0-9]+", (request, response) => {
         }
 
         if (Object.keys(body).includes(request.path.substr(1))) {
-          
+          response.redirect(body[request.path.substr(1)])
         }
     })
 });
