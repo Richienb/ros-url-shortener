@@ -19,42 +19,53 @@ const requestParams = (url, body) => {
     }
 }
 
-app.get("/", (_request, response) => {
-    response.sendFile(path.join(__dirname, "index.html"));
+app.get("/", (_req, res) => {
+    res.sendFile(path.join(__dirname, "index.html"));
 });
 
 // Match creation request
-app.get("/new/*", (_request, response) => {
+app.get("/new/*", (req, res) => {
     request(requestParams(endpoint), (err, _, body) => {
         if (err) {
-            throw err
+            res.status()
         }
 
-        if (isurl(request.path.substr(5))) {
+        if (isurl(req.path.substr(5))) {
+            if (Object.values(body).includes(req.path.substr(5))) {
+                res.json({
+                    "success": true,
+                    url: body.find((el) => {
+                        return el === req.path.substr(5)
+                    })
+                })
+            } else {
+                body[Object.keys(body).length + 1] = req.path.substr(5)
+                request(requestParams(endpoint, body), (err2, body2) => {
+
+                })
+            }
         }
-        
-        if (Object.keys(body).includes(request.path.substr(1))) {
-          response.redirect(body[request.path.substr(1)])
-        }
+
+
     })
 });
 
 // Match lookup request
-app.get("/[0-9]+", (request, response) => {
+app.get("/[0-9]+", (req, res) => {
     request(requestParams(endpoint), (err, _, body) => {
         if (err) {
             throw err
         }
 
-        if (Object.keys(body).includes(request.path.substr(1))) {
-          response.redirect(body[request.path.substr(1)])
+        if (Object.keys(body).includes(req.path.substr(1))) {
+            res.redirect(body[req.path.substr(1)])
         }
     })
 });
 
-function serverError(err, response) {
+function serverError(err, res) {
     console.error(err);
-    response.sendStatus(500);
+    res.sendStatus(500);
 }
 
 // listen for requests :)
