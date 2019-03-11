@@ -35,8 +35,9 @@ app.get("/new/*", (req, res) => {
             "message": "Unable to contact the storage endpoint."
         })
 
+        if (body.result === null) body.result = {}
+      
         if (isurl(req.path.substr(5))) {
-            if (!body.result) body.result = {}
             if (Object.values(body.result).includes(req.path.substr(5))) {
                 res.json({
                     "success": true,
@@ -49,8 +50,8 @@ app.get("/new/*", (req, res) => {
                     })]
                 })
             } else {
-                body[Object.keys(body.result).length] = req.path.substr(5)
-                request(requestParams(endpoint, body), (errb, bodyb) => {
+                body.result[Object.keys(body.result).length] = req.path.substr(5)
+                request(requestParams(endpoint, body.result), (errb, bodyb) => {
                     if (errb) res.status(502).json({
                         "success": false,
                         "message": "Unable to contact the storage endpoint."
