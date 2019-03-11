@@ -79,15 +79,12 @@ app.get("/new/*", (req, res) => {
 // Match lookup request
 app.get("/[0-9]+", (req, res) => {
     request(requestParams(endpoint), (err, _, body) => {
-        if (err) res.status(502).json({
-            "success": false,
-            "message": "Unable to contact storage endpoint."
-        })
+        if (err) res.status(502).send("Unable to contact storage endpoint.")
 
-        if (Object.keys(body).includes(req.path.substr(1))) {
-            res.redirect(body[req.path.substr(1)])
+        if (Object.keys(body.result).includes(req.path.substr(1))) {
+            res.redirect(body.result[req.path.substr(1)])
         } else {
-            res.status(404)
+            res.status(404).send("Short URL not found.")
         }
     })
 });
