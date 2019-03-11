@@ -3,6 +3,27 @@ const app = express()
 const path = require("path")
 const https = require("https")
 const endpoint = process.env.ENDPOINT
+const request = require("request")
+
+const requestParams = (url, body) => {
+    return {
+        url: url,
+        json: true,
+        gzip: true,
+        method: method,
+        headers: {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.80 Safari/537.36"
+        }
+    }
+}
+
+request(requestParams(endpoint), (err, _, body) => {
+    if (err) {
+        throw err
+    }
+
+    console.log(body)
+})
 
 app.get("/", (_request, response) => {
     response.sendFile(path.join(__dirname, "index.html"));
@@ -17,15 +38,17 @@ app.get("/new/*", (request, response) => {
 app.get("/[0-9]+", (request, response) => {
     https.get({
         host: endpoint,
-        port: 443,
-        path: '/'
+        headers: {
+            'Content-Type': "application/json"
+        }
     }, (res) => {
-        console.log('statusCode:', res.statusCode);
-        console.log('headers:', res.headers);
+        let data = ""
 
         res.on('data', (d) => {
             process.stdout.write(d);
         });
+
+        res.on('end')
 
     }).on('error', (e) => {
         console.error(e);
