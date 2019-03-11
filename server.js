@@ -4,6 +4,7 @@ const path = require("path")
 const https = require("https")
 const endpoint = process.env.ENDPOINT
 const request = require("request")
+const isurl = require("is-url")
 
 const requestParams = (url, body) => {
     return {
@@ -24,7 +25,18 @@ app.get("/", (_request, response) => {
 
 // Match creation request
 app.get("/new/*", (_request, response) => {
+    request(requestParams(endpoint), (err, _, body) => {
+        if (err) {
+            throw err
+        }
 
+        if (isurl(request.path.substr(5))) {
+        }
+        
+        if (Object.keys(body).includes(request.path.substr(1))) {
+          response.redirect(body[request.path.substr(1)])
+        }
+    })
 });
 
 // Match lookup request
