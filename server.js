@@ -3,10 +3,10 @@ const app = express()
 const path = require("path")
 const https = require("https")
 const endpoint = process.env.ENDPOINT
-const origin = "https://ros-url-shortener.glitch.me/"
+const origin = "https://ros-url-shortener.glitch.me"
 const request = require("request")
 const isurl = require("is-url")
-const urls
+const urljoin = require("url-join")
 
 const requestParams = (url, body) => {
     return {
@@ -34,16 +34,20 @@ app.get("/new/*", (req, res) => {
         })
 
         if (isurl(req.path.substr(5))) {
+            if (!body.result) body.result = {}
             if (Object.values(body.result).includes(req.path.substr(5))) {
                 res.json({
                     "success": true,
                     "new": false,
-                    "url": Object.keys(body.result)[Object.values(body.result).findIndex((el) => {
+                    "url": urljoin(origin, Object.keys(body.result)[Object.values(body.result).findIndex((el) => {
+                        return el === req.path.substr(5)
+                    })]),
+                    "id": Object.keys(body.result)[Object.values(body.result).findIndex((el) => {
                         return el === req.path.substr(5)
                     })]
                 })
             } else {
-                body[Object.keys(body).length + 1] = req.path.substr(5)
+                body[Object.keys(body.result).length] = req.path.substr(5)
                 request(requestParams(endpoint, body), (errb, bodyb) => {
                     if (errb) res.status(502).json({
                         "success": false,
@@ -56,7 +60,8 @@ app.get("/new/*", (req, res) => {
                     res.json({
                         "success": true,
                         "new": true,
-                        "url": origin + Object.keys(body).length + 1
+                        "url": urljoin(origin, Object.keys(body.result).length),
+                        "id": Object.keys(body.result).length
                     })
                 })
             }
@@ -81,6 +86,8 @@ app.get("/[0-9]+", (req, res) => {
 
         if (Object.keys(body).includes(req.path.substr(1))) {
             res.redirect(body[req.path.substr(1)])
+        } else {
+            res.status(404)
         }
     })
 });
