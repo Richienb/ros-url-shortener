@@ -1,10 +1,16 @@
-var express = require("express");
-var app = express();
-var mongodb = require("mongodb");
-var dbUrl = process.env.MONGOLAB_URI;
-var client = mongodb.MongoClient;
-var base_url = "https://ros-url-shortener.glitch.com/"
-var validUrl = require("valid-url");
+const express = require("express")
+const app = express()
+const endpoint = process.env.ENDPOINT
+
+const getrandom = () => { return Math.random().toString(32).substring(2, 5) + Math.random().toString(32).substring(2, 5) }
+
+function getrandom() {
+    var text = “”;
+    var possible = “ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789”;   
+    for (var i = 0; i < 5; i++)
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    return text;
+}
 
 app.get("/", (_request, response) => {
     response.sendFile("index.html");
