@@ -27,6 +27,8 @@ app.get("/", (_req, res) => {
 
 // Match creation request
 app.get("/new/*", (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     request(requestParams(endpoint), (err, _, body) => {
         if (err) res.status(502).json({
             "success": false,
@@ -78,6 +80,8 @@ app.get("/new/*", (req, res) => {
 
 // Match lookup request
 app.get("/[0-9]+", (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     request(requestParams(endpoint), (err, _, body) => {
         if (err) res.status(502).send("Unable to contact storage endpoint.")
 
