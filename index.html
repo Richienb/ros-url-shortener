@@ -1,67 +1,258 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>FCC URL shortener microservice</title>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  </head>
-  <body class="container">
-    <header>
-      <h1>
-        FCC URL shortener microservice
-      </h1>
-    </header>
+<html lang="en">
 
-    <main class="jumbotron" style="background-color: rgb(250,250,250);">
-      <h2>
-        User stories:
-      </h2>
-      <blockquote>
-          <p>
-            I can pass a URL as a parameter and I will receive a shortened URL in the JSON response.
-          </p>
-          <p>
-            When I visit that shortened URL, it will redirect me to my original link.
-          </p>     
-      </blockquote>
-      <h2>
-        Example creation usage:
-      </h2>
-      <pre>
-        https://ros-url-shortener.glitch.me/new/https://www.google.com
-        https://ros-url-shortener.glitch.me/new/http://foo.com:80
-      </pre>
-      <h2>
-        Example creation output:
-      </h2>
-      <pre>
-        { "original_url":"http://foo.com:80", "short_url":"https://ros-url-shortener.glitch.me/8170" }
-      </pre>
-      <h3>
-        Usage:
-      </h3>
-      <pre>
-        https://ros-url-shortener.glitch.me/0
-      </pre>
-      <h3>
-        Will redirect to:
-      </h3>
-      <pre>
-        https://www.google.com/
-      </pre>      
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="theme-color" content="#3F51B5">
+
+    <title>ROS URL Shortener</title>
+    <meta name="description" content="Just another URL shortener.">
+
+    <link rel="shortcut icon" href="favicon.ico">
+
+    <link rel="stylesheet" href="https://unpkg.com/material-components-web@1.0.0/dist/material-components-web.min.css">
+
+    <style>
+        :root {
+            --mdc-theme-primary: #3f51b5;
+            --mdc-theme-secondary: #f44336;
+            --mdc-theme-on-primary: #ffffff;
+            --mdc-theme-on-secondary: #ffffff;
+        }
+        
+        :root body {
+            background-color: #fafafa;
+        }
+        
+        :root body .ribbon {
+            top: 0;
+            z-index: -1;
+            background-color: #3f51b5;
+            width: 100%;
+            height: 10rem;
+            position: absolute;
+        }
+        
+        :root body .main-content {
+            background-color: #ffffff;
+            border-radius: 4px;
+            margin: 20px;
+            padding: 20px;
+            min-height: calc(100vh - 80px);
+        }
+        
+        :root body .main-content .full-width {
+            width: 100%;
+        }
+        
+        :root body .main-content .mdc-button--raised {
+            background-color: #f44336;
+        }
+        
+        :root body .main-content .fixed-bottom {
+            position: fixed;
+            bottom: 0;
+        }
+        
+        :root body .main-content .shorten--list {
+            display: none;
+        }
+        
+        :root body .main-content .shorten--url-copy {
+            top: 4px;
+        }
+        
+        :root body .main-content .shorten--list-url-copy,
+        :root body .main-content .shorten--list-id-copy {
+            right: 0px;
+            position: fixed;
+        }
+    </style>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+
+</head>
+
+<body>
+
+    <div class="ribbon mdc-elevation--z4"></div>
+    <main class="main-content mdc-typography mdc-elevation--z8">
+        <h1 class="mdc-typography--headline2">ROS URL Shortener</h1>
+        <p class="mdc-typography--body1">Just another URL shortener.</p>
+        <h2 class="mdc-typography--headline3">Shorten</h2>
+        <form class="shorten--form" action="#">
+            <div class="shorten--url mdc-text-field mdc-text-field--outlined full-width" data-mdc-auto-init="MDCTextField">
+                <input type="url" id="shorten--url" autocomplete="off" class="mdc-text-field__input" required>
+                <div class="mdc-notched-outline">
+                    <div class="mdc-notched-outline__leading"></div>
+                    <div class="mdc-notched-outline__notch">
+                        <label for="shorten--url" class="mdc-floating-label">URL to shorten</label>
+                    </div>
+                    <div class="mdc-notched-outline__trailing"></div>
+                </div>
+                <button class="mdc-icon-button shorten--url-copy" data-mdc-auto-init="MDCRipple">
+                    <svg class="mdc-icon-button__icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <path fill="none" d="M0 0h24v24H0V0z" />
+                        <path d="M19,20H5V4H7V7H17V4H19M12,2A1,1 0 0,1 13,3A1,1 0 0,1 12,4A1,1 0 0,1 11,3A1,1 0 0,1 12,2M19,2H14.82C14.4,0.84 13.3,0 12,0C10.7,0 9.6,0.84 9.18,2H5A2,2 0 0,0 3,4V20A2,2 0 0,0 5,22H19A2,2 0 0,0 21,20V4A2,2 0 0,0 19,2Z" />
+                    </svg>
+                </button>
+
+            </div>
+            <br>
+            <br>
+            <button class="shorten--button mdc-button mdc-button--raised" type="submit" data-mdc-auto-init="MDCRipple">
+                <span class="mdc-button__label">Shorten URL</span>
+                <div role="progressbar" class="shorten--progress fixed-bottom mdc-linear-progress mdc-linear-progress--indeterminate mdc-linear-progress--closed" data-mdc-auto-init="MDCLinearProgress">
+                    <div class="mdc-linear-progress__buffering-dots"></div>
+                    <div class="mdc-linear-progress__buffer"></div>
+                    <div class="mdc-linear-progress__bar mdc-linear-progress__primary-bar">
+                        <span class="mdc-linear-progress__bar-inner"></span>
+                    </div>
+                    <div class="mdc-linear-progress__bar mdc-linear-progress__secondary-bar">
+                        <span class="mdc-linear-progress__bar-inner"></span>
+                    </div>
+                </div>
+            </button>
+        </form>
+        <ul class="mdc-list mdc-list--two-line shorten--list">
+            <li class="mdc-list-item" tabindex="0">
+                <svg class="mdc-list-item__graphic" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <path fill="none" d="M0 0h24v24H0V0z" />
+                    <path d="M17 7h-4v2h4c1.65 0 3 1.35 3 3s-1.35 3-3 3h-4v2h4c2.76 0 5-2.24 5-5s-2.24-5-5-5zm-6 8H7c-1.65 0-3-1.35-3-3s1.35-3 3-3h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-2zm-3-4h8v2H8z" />
+                </svg>
+                <span class="mdc-list-item__text">
+      <span class="mdc-list-item__primary-text">Your URL</span>
+                <span class="mdc-list-item__secondary-text shorten--result-url"></span>
+                </span>
+                <button class="mdc-icon-button shorten--list-url-copy" data-clipboard-target=".shorten--result-url" data-mdc-auto-init="MDCRipple">
+                    <svg class="mdc-icon-button__icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <path fill="none" d="M0 0h24v24H0V0z" />
+                        <path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+                    </svg>
+                </button>
+            </li>
+            <li class="mdc-list-item">
+                <svg class="mdc-list-item__graphic" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <path fill="none" d="M0 0h24v24H0V0z" />
+                    <path d="M2 17h2v.5H3v1h1v.5H2v1h3v-4H2v1zm1-9h1V4H2v1h1v3zm-1 3h1.8L2 13.1v.9h3v-1H3.2L5 10.9V10H2v1zm5-6v2h14V5H7zm0 14h14v-2H7v2zm0-6h14v-2H7v2z" />
+                </svg>
+                <span class="mdc-list-item__text">
+      <span class="mdc-list-item__primary-text">Your ID</span>
+                <span class="mdc-list-item__secondary-text shorten--result-id"></span>
+                </span>
+                <button class="mdc-icon-button shorten--list-id-copy" data-clipboard-target=".shorten--result-id" data-mdc-auto-init="MDCRipple">
+                    <svg class="mdc-icon-button__icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <path fill="none" d="M0 0h24v24H0V0z" />
+                        <path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+                    </svg>
+                </button>
+            </li>
+        </ul>
+        <div class="main--snackbar mdc-snackbar mdc-snackbar--leading" data-mdc-auto-init="MDCSnackbar">
+            <div class="mdc-snackbar__surface">
+                <div class="mdc-snackbar__label" role="status" aria-live="polite">
+                </div>
+            </div>
+        </div>
     </main>
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+    <script src="https://unpkg.com/material-components-web@1.0.0/dist/material-components-web.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js"></script>
+    <script>
+        mdc.autoInit();
 
-    <footer>
-      <p>
-        <a href="https://glitch.com">
-          Remix this in Glitch
-        </a>        
-      </p>
-      <p>
-        <a href="https://github.com/Richienb/ros-url-shortener">
-          Source code
-        </a>
-      </p>
-    </footer>
-  </body>
+        $.each(
+            $(".mdc-icon-button[data-mdc-auto-init='MDCRipple']"), (_, {
+                MDCRipple
+            }) => {
+                MDCRipple.unbounded = true;
+            });
+
+        const snackBarMessage = message => {
+            $(".main--snackbar").
+            get(0).
+            MDCSnackbar.close();
+            $(".main--snackbar").get(0).MDCSnackbar.labelText = message;
+            $(".main--snackbar").
+            get(0).
+            MDCSnackbar.open();
+        };
+
+        const clipa = new ClipboardJS(".shorten--list-url-copy");
+        const clipb = new ClipboardJS(".shorten--list-id-copy");
+
+        $(".shorten--form").on("submit", e => {
+            e.preventDefault();
+            $(".shorten--list").hide();
+            $(".shorten--progress").
+            get(0).
+            MDCLinearProgress.open();
+            $(".shorten--button").prop("disabled", true);
+            $(".shorten--url-copy").prop("disabled", true);
+            $(".shorten--url").get(0).MDCTextField.disabled = true;
+            $.getJSON(
+                `https://ros-url-shortener.glitch.me/new/${
+  $(".shorten--url").get(0).MDCTextField.value
+  }`,
+                data => {
+                    if (data.success = false) {
+                        snackBarMessage(
+                            `An error occurred while generating a short URL: ${data.message}`);
+
+                    } else {
+                        snackBarMessage("Successfully generated short URL.");
+                    }
+                    $(".shorten--result-url").html(`${window.location.origin}/${data.id}`);
+                    $(".shorten--result-id").html(data.id);
+                    $(".shorten--list").show();
+                    $(".shorten--progress").
+                    get(0).
+                    MDCLinearProgress.close();
+                    $(".shorten--button").prop("disabled", false);
+                    $(".shorten--url-copy").prop("disabled", false);
+                    $(".shorten--url").get(0).MDCTextField.disabled = false;
+                });
+
+        });
+
+        $(".shorten--url-copy").click(() => {
+            navigator.clipboard.
+            readText().
+            then(text => {
+                if (!$(".shorten--url-copy").prop("disabled"))
+                    $(".shorten--url").get(0).MDCTextField.value = text;
+            }).
+            catch(err => {
+                console.error("Failed to read clipboard contents: ", err);
+            });
+        });
+
+        clipa.on("success", e => {
+            snackBarMessage("Successfully copied URL to clipboard.");
+
+            e.clearSelection();
+        });
+
+        clipa.on("error", e => {
+            snackBarMessage("Unable to copy URL to clipboard.");
+        });
+
+        clipb.on("success", e => {
+            snackBarMessage("Successfully copied ID to clipboard.");
+
+            e.clearSelection();
+        });
+
+        clipb.on("error", e => {
+            snackBarMessage("Unable to copy ID to clipboard.");
+        });
+    </script>
+
+</body>
+
 </html>
