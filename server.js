@@ -6,6 +6,7 @@ const endpoint = process.env.ENDPOINT
 const origin = "https://ros-url-shortener.glitch.me/"
 const request = require("request")
 const isurl = require("is-url")
+const urls
 
 const requestParams = (url, body) => {
     return {
@@ -33,14 +34,13 @@ app.get("/new/*", (req, res) => {
         })
 
         if (isurl(req.path.substr(5))) {
-          console.log(Object.values(body))
-            if (Object.values(body).includes(req.path.substr(5))) {
+            if (Object.values(body.result).includes(req.path.substr(5))) {
                 res.json({
                     "success": true,
                     "new": false,
-                    "url": body.find((el) => {
+                    "url": Object.keys(body.result)[Object.values(body.result).findIndex((el) => {
                         return el === req.path.substr(5)
-                    })
+                    })]
                 })
             } else {
                 body[Object.keys(body).length + 1] = req.path.substr(5)
