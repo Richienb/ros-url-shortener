@@ -39,6 +39,8 @@ app.get("/new/*", (req, res) => {
 
         if (body.result === null) body.result = {}
       
+        let urltoproc
+      
         if (isurl(req.path.substr(5))) {
             if (Object.values(body.result).includes(req.path.substr(5))) {
                 res.json({
