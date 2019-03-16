@@ -39,18 +39,16 @@ app.get("/new/*", (req, res) => {
 
         if (body.result === null) body.result = {}
       
-        let urltoproc
-      
         if (isurl(req.path.substr(5))) {
-            if (Object.values(body.result).includes(req.path.substr(5))) {
+            if (body.result.includes(req.path.substr(5))) {
                 res.json({
                     "success": true,
                     "new": false,
-                    "url": urljoin(origin, Object.keys(body.result)[Object.values(body.result).findIndex(el => el === req.path.substr(5))]),
-                    "id": Object.keys(body.result)[Object.values(body.result).findIndex(el => el === req.path.substr(5))]
+                    "url": urljoin(origin, body.result[body.result.findIndex(el => el === req.path.substr(5))]),
+                    "id": body.result.findIndex(el => el === req.path.substr(5))
                 })
             } else {
-                body.result[Object.keys(body.result).length] = req.path.substr(5)
+                body.result[body.result.length] = req.path.substr(5)
                 request(requestParams(endpoint, body.result), (errb, {ok}) => {
                     if (errb) res.status(502).json({
                         "success": false,
@@ -63,8 +61,8 @@ app.get("/new/*", (req, res) => {
                     res.json({
                         "success": true,
                         "new": true,
-                        "url": urljoin(origin, Object.keys(body.result).length),
-                        "id": Object.keys(body.result).length
+                        "url": urljoin(origin, body.result.length.toString()),
+                        "id": body.result.length
                     })
                 })
             }
