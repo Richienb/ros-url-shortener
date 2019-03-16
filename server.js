@@ -20,9 +20,9 @@ const requestParams = (url, body) => ({
 })
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*")
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-  next()
+    res.header("Access-Control-Allow-Origin", "*")
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+    next()
 })
 
 app.get("/", (_req, res) => {
@@ -38,7 +38,7 @@ app.get("/new/*", (req, res) => {
         })
 
         if (body.result === null) body.result = {}
-      
+
         if (isurl(req.path.substr(5))) {
             if (body.result.includes(req.path.substr(5))) {
                 res.json({
@@ -48,8 +48,10 @@ app.get("/new/*", (req, res) => {
                     "id": body.result.findIndex(el => el === req.path.substr(5))
                 })
             } else {
-                body.result[body.result.length] = req.path.substr(5)
-                request(requestParams(endpoint, body.result), (errb, {ok}) => {
+                body.result.push(req.path.substr(5))
+                request(requestParams(endpoint, body.result), (errb, {
+                    ok
+                }) => {
                     if (errb) res.status(502).json({
                         "success": false,
                         "message": "Unable to contact the storage endpoint."
@@ -61,8 +63,8 @@ app.get("/new/*", (req, res) => {
                     res.json({
                         "success": true,
                         "new": true,
-                        "url": urljoin(origin, body.result.length.toString()),
-                        "id": body.result.length
+                        "url": urljoin(origin, (body.result.length - 1).toString()),
+                        "id": body.result.length - 1
                     })
                 })
             }
@@ -79,16 +81,19 @@ app.get("/new/*", (req, res) => {
 
 // Match lookup request
 app.get("/get/*", (req, res) => {
-    request(requestParams(endpoint), (err, _, {result}) => {
+    request(requestParams(endpoint), (err, _, {
+        result
+    }) => {
         if (err) res.status(502).json({
             "success": false,
             "message": "Unable to contact the storage endpoint."
         })
 
-        if (Object.keys(result).includes(req.path.substr(1))) {
+        if (result.includes(req.path.substr(5))) {
             res.json({
                 "success": true,
-                "url": result[req.path.substr(1)]
+                "url": urljoin(origin, result.findIndex(el => el === req.path.substr(5)).toString()),
+                "id": result.findIndex(el => el === req.path.substr(5))
             })
         } else {
             res.status(404).json({
@@ -101,13 +106,13 @@ app.get("/get/*", (req, res) => {
 
 // Match navigation request
 app.get("/[0-9]+", (req, res) => {
-    res.header("Access-Control-Allow-Origin", "*")
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-    request(requestParams(endpoint), (err, _, {result}) => {
+    request(requestParams(endpoint), (err, _, {
+        result
+    }) => {
         if (err) res.status(502).send("Unable to contact the storage endpoint.")
 
-        if (Object.keys(result).includes(req.path.substr(1))) {
-            res.redirect(result[req.path.substr(1)])
+        if (result[parseInt(req.path.substr(1))]) {
+            res.redirect(result[parseInt(req.path.substr(1))])
         } else {
             res.status(404).send("No match found for short URL!")
         }
