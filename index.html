@@ -152,6 +152,11 @@
                 </button>
             </li>
         </ul>
+      <h2 class="mdc-typography--headline3">Bookmarklet</h2>
+      <p class="mdc-typography--body1">Drag the following button to your bookmarks bar.</p>
+      <a class="bookmarklet--button mdc-button">
+                <span class="mdc-button__label">ROS URL Shortener</span>
+            </a>
         <div class="main--snackbar mdc-snackbar mdc-snackbar--leading" data-mdc-auto-init="MDCSnackbar">
             <div class="mdc-snackbar__surface">
                 <div class="mdc-snackbar__label" role="status" aria-live="polite">
@@ -196,9 +201,7 @@
             $(".shorten--url-copy").prop("disabled", true);
             $(".shorten--url").get(0).MDCTextField.disabled = true;
             $.getJSON(
-                `https://ros-url-shortener.glitch.me/new/${
-  $(".shorten--url").get(0).MDCTextField.value
-  }`,
+                `https://ros-url-shortener.glitch.me/new/${$(".shorten--url").get(0).MDCTextField.value}`,
                 data => {
                     if (data.success = false) {
                         snackBarMessage(
@@ -219,6 +222,11 @@
                 });
 
         });
+
+        if (location.hash) {
+            $(".shorten--url").get(0).MDCTextField.value = location.hash.substr(1)
+            $(".shorten--button").click()
+        }
 
         $(".shorten--url-copy").click(() => {
             navigator.clipboard.
