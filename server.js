@@ -89,16 +89,15 @@ app.get("/get/*", (req, res) => {
             "message": "Unable to contact the storage endpoint."
         })
 
-        if (result.includes(req.path.substr(5))) {
+        if (result.length > parseInt(req.path.substr(5))) {
             res.json({
                 "success": true,
-                "url": urljoin(origin, result.findIndex(el => el === req.path.substr(5)).toString()),
-                "id": result.findIndex(el => el === req.path.substr(5))
+                "url": result[parseInt(req.path.substr(5))]
             })
         } else {
             res.status(404).json({
                 "success": false,
-                "message": "No match found for short URL!"
+                "message": "No match found for the ID!"
             })
         }
     })
