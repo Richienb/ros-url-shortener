@@ -1,3 +1,4 @@
+// Packages
 const express = require("express")
 const app = express()
 const path = require("path")
@@ -5,9 +6,12 @@ const https = require("https")
 const request = require("request")
 const isurl = require("is-url")
 const urljoin = require("url-join")
+
+// Constants
 const endpoint = process.env.ENDPOINT
 const origin = "https://ros-url-shortener.glitch.me"
 
+// Parameter requesting
 const requestParams = (url, body) => ({
     url,
     json: true,
@@ -19,12 +23,14 @@ const requestParams = (url, body) => ({
     }
 })
 
+// Disable CORS
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*")
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
     next()
 })
 
+// Match website request
 app.get("/", (_req, res) => {
     res.sendFile(path.join(__dirname, "index.html"))
 })
@@ -118,7 +124,5 @@ app.get("/[0-9]+", (req, res) => {
     })
 })
 
-// listen for requests :)
-const listener = app.listen(process.env.PORT, () => {
-    console.log(`Your app is listening on port ${listener.address().port}`)
-})
+// Listen for any requests
+app.listen(process.env.PORT)
