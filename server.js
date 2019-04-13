@@ -127,6 +127,12 @@ app.get("/api/*", (req, res) => {
     })
 })
 
+// Match api documentation request
+app.get("/api.yaml", (_req, res) => res.sendFile(path.join(__dirname, "api.yaml")))
+
+// Match naked api request
+app.get("/api", (_req, res) => res.redirect(308, "https://api-docs.richie-bendall.ml/#https://ros-url-shortener.glitch.me/api.yaml"))
+
 // Match deprecated lookup request
 app.get("/get/*", (req, res) => res.redirect(308, urljoin(origin, "api", req.path.substr(5))))
 

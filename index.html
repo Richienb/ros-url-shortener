@@ -13,7 +13,7 @@
 
     <link rel="shortcut icon" href="https://cdn.glitch.com/374c46bd-22ab-4f22-8467-9bf444a5a06b%2Ffavicon.ico?1552302718992">
 
-    <link rel="stylesheet" href="https://unpkg.com/material-components-web@1.0.0/dist/material-components-web.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/material-components-web@1.1.1/dist/material-components-web.min.css">
 
     <style>
         :root {
@@ -161,12 +161,8 @@
         <a href="javascript:window.open(%22https://ros-url-shortener.glitch.me%23%22+window.location.href)" class="bookmarklet--button mdc-button mdc-button--outlined" data-mdc-auto-init="MDCRipple">
             <span class="mdc-button__label">ROS URL Shortener</span>
         </a>
-        <h2 class="mdc-typography--headline3">API for developers</h2>
-        <p class="mdc-typography--body1">Endpoint: <code class="darken">https://ros-url-shortener.glitch.me/</code></p>
-        <p class="mdc-typography--body1">Generate URL example: <code class="darken">https://ros-url-shortener.glitch.me/new/https://example.com</code></p>
-        <p class="mdc-typography--body2"><code class="darken">{"success":true,"new":true,"url":"https://ros-url-shortener.glitch.me/58","id":58}</code></p>
-        <p class="mdc-typography--body1">Lookup URL example: <code class="darken">https://ros-url-shortener.glitch.me/get/58</code></p>
-        <p class="mdc-typography--body2"><code class="darken">{"success":true,"url":"https://example.com"}</code></p>
+        <h2 class="mdc-typography--headline3">For developers</h2>
+        <p class="mdc-typography--body1"><a href="api">Official Documentation</a></p>
         <!-- UNCOMMENT THESE LINES WHEN ADAPTING FOR YOUR OWN PROJECT
         <h2 class="mdc-typography--headline3">Credit</h2>
         <p class="mdc-typography--body1">Created by Richie Bendall and licensed under the MIT License</p>
@@ -180,7 +176,7 @@
     </main>
 
     <script async src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
-    <script src="https://unpkg.com/material-components-web@1.0.0/dist/material-components-web.min.js"></script>
+    <script src="https://unpkg.com/material-components-web@1.1.1/dist/material-components-web.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js"></script>
 
@@ -216,6 +212,9 @@
             $(".shorten--button").prop("disabled", true);
             $(".shorten--url-copy").prop("disabled", true);
             $(".shorten--url").get(0).MDCTextField.disabled = true;
+            $.post('https://jsonplaceholder.typicode.com/todos/1', {}, function(response) {
+              console.log(response)
+            }, 'json');
             $.getJSON(
                 `https://ros-url-shortener.glitch.me/new/${$(".shorten--url").get(0).MDCTextField.value}`,
                 data => {

@@ -1,0 +1,182 @@
+paths:
+  /:
+    get:
+      operationId: 'Lookup ID'
+      summary: 'Lookup the URL associated with an ID.'
+      responses:
+        '200':
+          description: 'The lookup succeeded.'
+          schema:
+            x-oad-type: object
+            type: object
+            properties:
+              success:
+                x-oad-type: boolean
+                type: boolean
+                title: 'If the operation succeeded.'
+                default: 'True'
+                readOnly: true
+              url:
+                x-oad-type: string
+                type: string
+                title: 'The fetched URL.'
+                default: 'https://example.com'
+                readOnly: true
+          x-oad-type: response
+        '404':
+          description: 'Unable to find the URL.'
+          schema:
+            x-oad-type: object
+            type: object
+            properties:
+              success:
+                x-oad-type: boolean
+                type: boolean
+                title: 'If the operation succeeded.'
+                default: 'False'
+                readOnly: true
+              message:
+                x-oad-type: string
+                type: string
+                title: 'The error description'
+                enum:
+                  - 'No match found for the ID!'
+                default: 'No match found for the ID!'
+                readOnly: true
+          x-oad-type: response
+        '502':
+          description: 'An internal server error occurred.'
+          schema:
+            x-oad-type: object
+            type: object
+            properties:
+              success:
+                x-oad-type: boolean
+                type: boolean
+                title: 'If the operation succeeded.'
+                default: 'False'
+                readOnly: true
+              message:
+                x-oad-type: string
+                type: string
+                title: 'The error description'
+                enum:
+                  - 'Unable to contact the storage endpoint.'
+                default: 'Unable to contact the storage endpoint.'
+                readOnly: true
+          x-oad-type: response
+      parameters:
+        -
+          name: ID
+          in: path
+          description: 'The ID to look up'
+          required: true
+          type: integer
+          format: int32
+          x-oad-type: parameter
+    post:
+      operationId: 'Create Short URL'
+      summary: 'Create or fetch a short ID from a URL.'
+      responses:
+        '200':
+          description: 'The URL was successfully shortened'
+          schema:
+            x-oad-type: object
+            type: object
+            properties:
+              success:
+                x-oad-type: boolean
+                type: boolean
+                title: 'If the operation succeeded.'
+                default: 'True'
+                readOnly: true
+              new:
+                x-oad-type: boolean
+                type: boolean
+                title: 'If the shortened URL was just created.'
+                readOnly: true
+              url:
+                x-oad-type: string
+                type: string
+                title: 'The short URL which will redirect to the long URL.'
+                default: 'https://example.com'
+                readOnly: true
+              id:
+                x-oad-type: integer
+                type: integer
+                title: 'The ID of the shortened URL.'
+                format: int32
+                default: '58'
+                readOnly: true
+          x-oad-type: response
+        '400':
+          description: 'String provided is not a URL.'
+          schema:
+            x-oad-type: object
+            type: object
+            properties:
+              success:
+                x-oad-type: boolean
+                type: boolean
+                title: 'If the operation succeeded.'
+                default: 'False'
+                readOnly: true
+              message:
+                x-oad-type: string
+                type: string
+                title: 'The error description'
+                enum:
+                  - 'No match found for the ID!'
+                default: 'String provided is not a URL.'
+                readOnly: true
+          x-oad-type: response
+        '500':
+          description: 'An internal server error occurred.'
+          schema:
+            x-oad-type: object
+            type: object
+            properties:
+              success:
+                x-oad-type: boolean
+                type: boolean
+                title: 'If the operation succeeded.'
+                default: 'False'
+                readOnly: true
+              message:
+                x-oad-type: string
+                type: string
+                title: 'The error description'
+                enum:
+                  - 'Unable to contact the storage endpoint.'
+                  - 'The storage endpoint returned an error.'
+                default: 'Unable to contact the storage endpoint.'
+                readOnly: true
+          x-oad-type: response
+      parameters:
+        -
+          name: URL
+          in: path
+          description: 'The URL to shorten'
+          required: true
+          type: string
+          x-oad-type: parameter
+    x-oad-type: operation
+info:
+  title: 'ROS URL Shortener API'
+  version: 1.0.0
+  description: 'Just another URL shortener.'
+  termsOfService: 'https://docs.google.com/document/d/1VdujSYPVONr13Au0t4HNCC_7xK4v-eGMS3_AHCDPFdc/edit?usp=sharing'
+  contact:
+    name: 'Richie Bendall'
+    email: richiebendall@gmail.com
+    url: 'https://richienb.github.io'
+  license:
+    name: MIT
+    url: 'https://mit-license.org'
+host: link.richie-bendall.ml
+basePath: /api
+consumes:
+  - application/x-www-form-urlencoded
+produces:
+  - application/json
+swagger: '2.0'
