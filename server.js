@@ -35,8 +35,23 @@ app.get("/", (_req, res) => {
     res.sendFile(path.join(__dirname, "index.html"))
 })
 
+// Match navigation request
+app.get("/[0-9]+", (req, res) => {
+    request(requestParams(endpoint), (err, _, {
+        result
+    }) => {
+        if (err) res.status(502).send("Unable to contact the storage endpoint.")
+
+        if (result[parseInt(req.path.substr(1))]) {
+            res.redirect(result[parseInt(req.path.substr(1))])
+        } else {
+            res.status(404).send("No match found for short URL!")
+        }
+    })
+})
+
 // Match creation request
-app.get("/new/*", (req, res) => {
+app.post("/api/*", (req, res) => {
     request(requestParams(endpoint), (err, _, body) => {
         if (err) res.status(502).json({
             "success": false,
@@ -109,23 +124,11 @@ app.get("/api/*", (req, res) => {
     })
 })
 
+// Match deprecated creation request
+app.get("/new/*", (req, res) => res.redirect(308, urljoin(origin, "api", req.path.substr(5))))
+
 // Match deprecated lookup request
-app.get("/get/*", (req, res) => res.redirect(301, urljoin(origin, req.path.substr(5))))
-
-// Match navigation request
-app.get("/[0-9]+", (req, res) => {
-    request(requestParams(endpoint), (err, _, {
-        result
-    }) => {
-        if (err) res.status(502).send("Unable to contact the storage endpoint.")
-
-        if (result[parseInt(req.path.substr(1))]) {
-            res.redirect(result[parseInt(req.path.substr(1))])
-        } else {
-            res.status(404).send("No match found for short URL!")
-        }
-    })
-})
+app.get("/get/*", (req, res) => res.redirect(308, urljoin(origin, "api", req.path.substr(5))))
 
 // Listen for any requests
 app.listen(process.env.PORT)
