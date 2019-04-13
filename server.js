@@ -100,6 +100,9 @@ app.post("/api/*", (req, res) => {
     })
 })
 
+// Match deprecated creation request
+app.get("/new/*", (req, res) => res.redirect(308, urljoin(origin, "api", req.path.substr(5))))
+
 // Match lookup request
 app.get("/api/*", (req, res) => {
     request(requestParams(endpoint), (err, _, {
@@ -123,9 +126,6 @@ app.get("/api/*", (req, res) => {
         }
     })
 })
-
-// Match deprecated creation request
-app.get("/new/*", (req, res) => res.redirect(308, urljoin(origin, "api", req.path.substr(5))))
 
 // Match deprecated lookup request
 app.get("/get/*", (req, res) => res.redirect(308, urljoin(origin, "api", req.path.substr(5))))
