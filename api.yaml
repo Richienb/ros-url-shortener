@@ -130,7 +130,7 @@ paths:
                 default: 'String provided is not a URL.'
                 readOnly: true
           x-oad-type: response
-        '500':
+        '502':
           description: 'An internal server error occurred.'
           schema:
             x-oad-type: object
