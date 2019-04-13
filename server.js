@@ -86,7 +86,7 @@ app.get("/new/*", (req, res) => {
 })
 
 // Match lookup request
-app.get("/get/*", (req, res) => {
+app.get("/api/*", (req, res) => {
     request(requestParams(endpoint), (err, _, {
         result
     }) => {
@@ -108,6 +108,9 @@ app.get("/get/*", (req, res) => {
         }
     })
 })
+
+// Match deprecated lookup request
+app.get("/get/*", (req, res) => res.redirect(301, urljoin(origin, req.path.substr(5))))
 
 // Match navigation request
 app.get("/[0-9]+", (req, res) => {
