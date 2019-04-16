@@ -10,7 +10,7 @@ paths:
             x-oad-type: object
             type: object
             properties:
-              success:
+              success: 
                 x-oad-type: boolean
                 type: boolean
                 title: 'If the operation succeeded.'
@@ -130,7 +130,7 @@ paths:
                 default: 'String provided is not a URL.'
                 readOnly: true
           x-oad-type: response
-        '502':
+        '500':
           description: 'An internal server error occurred.'
           schema:
             x-oad-type: object
