@@ -1,5 +1,5 @@
 paths:
-  /:
+  /{QUERY}:
     get:
       operationId: 'Lookup ID'
       summary: 'Lookup the URL associated with an ID.'
@@ -67,7 +67,7 @@ paths:
           x-oad-type: response
       parameters:
         -
-          name: ID
+          name: QUERY
           in: path
           description: 'The ID to look up'
           required: true
@@ -154,7 +154,7 @@ paths:
           x-oad-type: response
       parameters:
         -
-          name: URL
+          name: QUERY
           in: path
           description: 'The URL to shorten'
           required: true
