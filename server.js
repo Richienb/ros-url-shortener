@@ -37,19 +37,14 @@ app.get("/", (_req, res) => {
 
 // Match navigation request
 app.get("/[0-9]+", (req, res) => {
-  console.log(req.ipInfo)
     request(requestParams(urljoin(process.env.TPOINT, req.path.substr(1))), (err, _, {
         result
     }) => {
         if (err) res.status(502).send("Unable to contact the storage endpoint.")
         result = result || []
-        result.push()
+        result.push(req.headers['x-forwarded-for'] || req.connection.remoteAddress)
       
-        // if (result[parseInt(req.path.substr(1))]) {
-        //     res.redirect(result[parseInt(req.path.substr(1))])
-        // } else {
-        //     res.status(404).send("No match found for short URL!")
-        // }
+        request(requestParams(urljoin(process.env.TPOINT, req.path.substr(1)), result))
     })
     request(requestParams(endpoint), (err, _, {
         result
