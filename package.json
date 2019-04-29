@@ -10,7 +10,8 @@
     "express": "^4.16.4",
     "request": "^2.88.0",
     "is-url": "^1.2.4",
-    "url-join": "^4.0.0"
+    "url-join": "^4.0.0",
+    "express-ip": "^1.0.3"
   },
   "engines": {
     "node": "10.x.x"
