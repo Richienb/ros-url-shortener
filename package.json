@@ -1,28 +1,35 @@
 {
-  "name": "ros-url-shortener",
-  "version": "0.0.1",
-  "description": "Just another URL shortener.",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
-  },
-  "dependencies": {
-    "express": "^4.16.4",
-    "request": "^2.88.0",
-    "is-url": "^1.2.4",
-    "url-join": "^4.0.0"
-  },
-  "engines": {
-    "node": "10.x.x"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Richienb/ros-url-shortener"
-  },
-  "license": "MIT",
-  "keywords": [
-    "node",
-    "glitch",
-    "express"
-  ]
+    "name": "ros-url-shortener",
+    "version": "0.0.1",
+    "description": "Just another URL shortener.",
+    "main": "server.js",
+    "scripts": {
+        "start": "node .",
+        "dev": "nodemon ."
+    },
+    "dependencies": {
+        "@sentry/node": "^5.4.3",
+        "chance": "^1.0.18",
+        "express": "^4.17.1",
+        "is-url": "^1.2.4",
+        "request": "^2.88.0",
+        "request-promise": "^4.2.4",
+        "url-join": "^4.0.0"
+    },
+    "engines": {
+        "node": ">=10.x.x"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Richienb/ros-url-shortener"
+    },
+    "license": "MIT",
+    "keywords": [
+        "node",
+        "glitch",
+        "express"
+    ],
+    "devDependencies": {
+        "nodemon": "^1.19.1"
+    }
 }

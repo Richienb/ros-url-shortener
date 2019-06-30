@@ -2,148 +2,64 @@
 const express = require("express")
 const app = express()
 const path = require("path")
-const https = require("https")
-const request = require("request")
-const isurl = require("is-url")
-const urljoin = require("url-join")
+const joinurl = require("url-join")
+const Sentry = require('@sentry/node');
 
 // Constants
-const endpoint = process.env.ENDPOINT
 const origin = "https://ros-url-shortener.glitch.me"
+const PORT = process.env.PORT || 80
 
-// Parameter requesting
-const requestParams = (url, body) => ({
-    url,
-    json: true,
-    gzip: true,
-    method: body ? "POST" : "GET",
-    body,
-    headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3163.100 Safari/537.36"
-    }
-})
+// Concurrency
+const cluster = require('cluster');
+const numCPUs = require('os').cpus().length;
+
+Sentry.init({ dsn: 'https://0df9f3fb072449879fe3769ed9d8cf18@sentry.io/1493463' });
+
+// Sentry request handling
+app.use(Sentry.Handlers.requestHandler());
 
 // Disable CORS
-app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*")
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-    next()
-})
+app.use(require("./middleware/cors"))
 
 // Match website request
-app.get("/", (_req, res) => {
-    res.sendFile(path.join(__dirname, "index.html"))
-})
-
-// Match navigation request
-app.get("/[0-9]+", (req, res) => {
-    request(requestParams(urljoin(process.env.TPOINT, req.path.substr(1))), (err, _, {
-        result
-    }) => {
-        if (err) res.status(502).send("Unable to contact the storage endpoint.")
-        result = result || []
-        result.push(req.headers['x-forwarded-for'] || req.connection.remoteAddress)
-      
-        request(requestParams(urljoin(process.env.TPOINT, req.path.substr(1)), result))
-    })
-    request(requestParams(endpoint), (err, _, {
-        result
-    }) => {
-        if (err) res.status(502).send("Unable to contact the storage endpoint.")
-
-        if (result[parseInt(req.path.substr(1))]) {
-            res.redirect(result[parseInt(req.path.substr(1))])
-        } else {
-            res.status(404).send("No match found for short URL!")
-        }
-    })
-})
+app.get("/", (_req, res) => res.sendFile(path.join(__dirname, "index.html")))
 
 // Match creation request
-app.post("/api/*", (req, res) => {
-    request(requestParams(endpoint), (err, _, body) => {
-        if (err) res.status(502).json({
-            "success": false,
-            "message": "Unable to contact the storage endpoint."
-        })
-
-        if (body.result === null) body.result = {}
-
-        if (isurl(req.path.substr(5))) {
-            if (body.result.includes(req.path.substr(5))) {
-                res.json({
-                    "success": true,
-                    "new": false,
-                    "url": urljoin(origin, body.result[body.result.findIndex(el => el === req.path.substr(5))]),
-                    "id": body.result.findIndex(el => el === req.path.substr(5))
-                })
-            } else {
-                body.result.push(req.path.substr(5))
-                request(requestParams(endpoint, body.result), (errb, {
-                    ok
-                }) => {
-                    if (errb) res.status(502).json({
-                        "success": false,
-                        "message": "Unable to contact the storage endpoint."
-                    })
-                    if (ok === false) res.status(502).json({
-                        "success": false,
-                        "message": "The storage endpoint returned an error."
-                    })
-                    res.json({
-                        "success": true,
-                        "new": true,
-                        "url": urljoin(origin, (body.result.length - 1).toString()),
-                        "id": body.result.length - 1
-                    })
-                })
-            }
-        } else {
-            res.status(400).json({
-                "success": false,
-                "message": "String provided is not a URL."
-            })
-        }
-
-
-    })
-})
+app.post("/api/*", require("./routes/create"))
 
 // Match deprecated creation request
-app.get("/new/*", (req, res) => res.redirect(308, urljoin(origin, "api", req.path.substr(5))))
+app.get("/new/*", (req, res) => res.redirect(308, joinurl(origin, "api", req.path.substr(5))))
 
 // Match lookup request
-app.get("/api/*", (req, res) => {
-    request(requestParams(endpoint), (err, _, {
-        result
-    }) => {
-        if (err) res.status(502).json({
-            "success": false,
-            "message": "Unable to contact the storage endpoint."
-        })
+app.get("/api/*", require("./routes/lookup"))
 
-        if (result.length > parseInt(req.path.substr(5))) {
-            res.json({
-                "success": true,
-                "url": result[parseInt(req.path.substr(5))]
-            })
-        } else {
-            res.status(404).json({
-                "success": false,
-                "message": "No match found for the ID!"
-            })
-        }
-    })
-})
+// Match deprecated lookup request
+app.get("/get/*", (req, res) => res.redirect(308, joinurl(origin, "api", req.path.substr(5))))
 
 // Match api documentation request
-app.get("/api.yaml", (_req, res) => res.sendFile(path.join(__dirname, "api.yaml")))
+app.use("/api.yaml", express.static(path.join(__dirname, "api.yaml")));
 
 // Match naked api request
 app.get("/api", (_req, res) => res.redirect(308, "https://api-docs.richie-bendall.ml/#https://ros-url-shortener.glitch.me/api.yaml"))
 
-// Match deprecated lookup request
-app.get("/get/*", (req, res) => res.redirect(308, urljoin(origin, "api", req.path.substr(5))))
+// Match navigation request
+app.get("/*", require("./routes/nav"))
 
-// Listen for any requests
-app.listen(process.env.PORT)
+// Sentry error handling
+app.use(Sentry.Handlers.errorHandler());
+
+// If the current process is the main one
+if (cluster.isMaster) {
+  // Create processes relative to amount of CPUs
+  Array.from({
+    length: numCPUs
+  }, () => cluster.fork());
+
+  // When worker closed
+  cluster.on('exit', worker => {
+    console.log(`❌ Worker ${worker.process.pid} died.`);
+  });
+} else {
+    // Listen for HTTP requests
+    app.listen(PORT, () => console.log(`🚀 on http://localhost:${PORT}`))
+}
