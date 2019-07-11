@@ -21,19 +21,33 @@ app.use(Sentry.Handlers.requestHandler());
 // Disable CORS
 app.use(require("./middleware/cors"))
 
+// Parse URL-encoded bodies (as sent by HTML forms)
+app.use(express.urlencoded({
+    extended: true
+}))
+
+// Parse JSON bodies (as sent by API clients)
+app.use(express.json())
+
 // Match website request
 app.get("/", (_req, res) => res.sendFile(path.join(__dirname, "index.html")))
 
 // Match creation request
-app.post("/api/*", require("./routes/create"))
+app.post("/api/", require("./routes/create"))
 
-// Match deprecated creation request
-app.get("/new/*", (req, res) => res.redirect(308, joinurl(origin, "api", req.path.substr(5))))
+// v2: Match creation request
+app.post("/api/:url", (req, res) => res.redirect(308, joinurl("/", "api", `?url=${req.params.url}`)))
+
+// v1: Match creation request
+app.get("/new/:url", (req, res) => res.redirect(308, joinurl("/", "api", `?url=${req.params.url}`)))
 
 // Match lookup request
 app.get("/api/*", require("./routes/lookup"))
 
-// Match deprecated lookup request
+// v1: Match deprecated lookup request
+app.get("/get/*", (req, res) => res.redirect(308, joinurl(origin, "api", req.path.substr(5))))
+
+// v1: Match deprecated lookup request
 app.get("/get/*", (req, res) => res.redirect(308, joinurl(origin, "api", req.path.substr(5))))
 
 // Match api documentation request

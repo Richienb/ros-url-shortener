@@ -16,7 +16,7 @@ const genId = (notin) => {
 }
 
 module.exports = (req, res) => {
-    const url = req.path.slice(5)
+    const url = req.query.url
     if (!isurl(url)) res.status(400).json({
         "success": false,
         "message": "String provided is not a URL."
