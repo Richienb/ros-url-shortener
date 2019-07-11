@@ -1,10 +1,10 @@
-const request = require("request-promise")
-const version = require("../package.json").version
+import request from "request-promise"
+import userAgent from "./data/userAgent"
 
-module.exports = request.defaults({
+export default request.defaults({
     json: true,
     gzip: true,
     headers: {
-        "User-Agent": `ROS URL Shortener v${version}`
+        "User-Agent": userAgent
     }
 })

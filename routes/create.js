@@ -1,9 +1,8 @@
-const request = require("../utils/request")
+import request from "../utils/request"
 const endpoint = process.env.ENDPOINT
-const joinurl = require("url-join")
-const isurl = require("is-url")
+import joinurl from "url-join"
+import isurl from "is-url"
 const chance = require("chance").Chance();
-const Promise = require("bluebird")
 const origin = "https://ros-url-shortener.glitch.me"
 
 const genId = (notin) => {

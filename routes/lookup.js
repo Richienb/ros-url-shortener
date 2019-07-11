@@ -1,6 +1,6 @@
-const request = require("../utils/request")
+import request from "../utils/request"
 const endpoint = process.env.ENDPOINT
-const joinurl = require("url-join")
+import joinurl from "url-join"
 
 module.exports = (req, res) => {
     request(joinurl(endpoint, req.query.id))

@@ -1,8 +1,8 @@
-const request = require("../utils/request")
+import request from "../utils/request"
 const endpoint = process.env.ENDPOINT
 import joinurl from "url-join"
 
-export default (req, res) => {
+module.exports = (req, res) => {
     request(joinurl(endpoint, req.params.id))
         .then(({result, ok}) => {
             if (!ok) res.status(502).send("Unable to contact the storage endpoint.")
