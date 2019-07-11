@@ -1,52 +1,53 @@
 dependencies:
-  '@sentry/node': 5.4.3
+  '@sentry/node': 5.5.0
   chance: 1.0.18
+  esm: 3.2.25
   express: 4.17.1
   is-url: 1.2.4
   request: 2.88.0
   request-promise: 4.2.4
-  url-join: 4.0.0
+  url-join: 4.0.1
 devDependencies:
   nodemon: 1.19.1
 packages:
-  /@sentry/core/5.4.3:
+  /@sentry/core/5.5.0:
     dependencies:
-      '@sentry/hub': 5.4.3
-      '@sentry/minimal': 5.4.3
-      '@sentry/types': 5.4.2
-      '@sentry/utils': 5.4.2
+      '@sentry/hub': 5.5.0
+      '@sentry/minimal': 5.5.0
+      '@sentry/types': 5.5.0
+      '@sentry/utils': 5.5.0
       tslib: 1.10.0
     dev: false
     engines:
       node: '>=6'
     resolution:
-      integrity: sha512-VjRv9BXip2BtCSohi/WQra+Ep4B8ajer1nU1VpKy5tUCjpVfXRpitY23EdEl+MVJH7h6YPZ45JsuFiKGgrtaFQ==
-  /@sentry/hub/5.4.3:
+      integrity: sha512-xOcBud0t5mfhFdyd2tQQti4uuWSrLiJihpXzxeRpdCfk2ic+xmpeQs3G4UqnluvQDc48ug/Igt7LXfSBRBx4eg==
+  /@sentry/hub/5.5.0:
     dependencies:
-      '@sentry/types': 5.4.2
-      '@sentry/utils': 5.4.2
+      '@sentry/types': 5.5.0
+      '@sentry/utils': 5.5.0
       tslib: 1.10.0
     dev: false
     engines:
       node: '>=6'
     resolution:
-      integrity: sha512-97bnk2dDuCdFv2xhujogqPiDDpKOsHxBXH1jOJ5ezr3/uZNsMRr450FDxxJJYDLuSx+qZ/+vUFfdVNjprBsuSg==
-  /@sentry/minimal/5.4.3:
+      integrity: sha512-+jKh5U1nv8ufoquGciWoZPOmKuEjFPH5m0VifCs6t3NcEbAq2qnfF26KUGqhUNznlUN/PkbWB4qMfKn14uNE2Q==
+  /@sentry/minimal/5.5.0:
     dependencies:
-      '@sentry/hub': 5.4.3
-      '@sentry/types': 5.4.2
+      '@sentry/hub': 5.5.0
+      '@sentry/types': 5.5.0
       tslib: 1.10.0
     dev: false
     engines:
       node: '>=6'
     resolution:
-      integrity: sha512-xSCcKDtVtlmJIGmnlNH2fL++4l7iORJ+pOOfTz1Yjm/Il7Tz9wLVodbEfplXmAbOvgG/x9oilbW0MBSnrwKPfQ==
-  /@sentry/node/5.4.3:
+      integrity: sha512-o6O30+/pNrO7fTgwKxgZynHB7cMScJlw9HXgnNXgLXS6LBiqjYCQfVnWAgV//SyyG0uUlcjH3P6PnV6TsJOmVQ==
+  /@sentry/node/5.5.0:
     dependencies:
-      '@sentry/core': 5.4.3
-      '@sentry/hub': 5.4.3
-      '@sentry/types': 5.4.2
-      '@sentry/utils': 5.4.2
+      '@sentry/core': 5.5.0
+      '@sentry/hub': 5.5.0
+      '@sentry/types': 5.5.0
+      '@sentry/utils': 5.5.0
       cookie: 0.3.1
       https-proxy-agent: 2.2.1
       lru_map: 0.3.3
@@ -55,22 +56,22 @@ packages:
     engines:
       node: '>=6'
     resolution:
-      integrity: sha512-QdLj1Po+94Ns9y5Z4orvA/febJV8i1uwSVK/cj61FISdb2DXlCWRFV9OYvm0I0EIHr9xAORpOCmyy0JbO1lE8w==
-  /@sentry/types/5.4.2:
+      integrity: sha512-Qn60k7NqJhzpI7PnW/dOz2Y1ofD6kMKGEgLWAO5vcbNShyQj7m2JYFk0c7nFU9HDgertqkxQnvhvIGvT+QokaQ==
+  /@sentry/types/5.5.0:
     dev: false
     engines:
       node: '>=6'
     resolution:
-      integrity: sha512-yh1fd7x5lLOIZ8W3A1I792B3jowJVCWp4HcTRikjTsjbF8lcURY62m+hiLYUFPTIX99AlFRIPiApDkWiwMGYMA==
-  /@sentry/utils/5.4.2:
+      integrity: sha512-3otF/miVDth91o+iign00x0o31McUPeyIFbMjLbgeTRRW9rXpu2jGrcRrvHfofECtoqCf5Y734hwvvlBvFZeIw==
+  /@sentry/utils/5.5.0:
     dependencies:
-      '@sentry/types': 5.4.2
+      '@sentry/types': 5.5.0
       tslib: 1.10.0
     dev: false
     engines:
       node: '>=6'
     resolution:
-      integrity: sha512-AW7/TGt2HiPQB8lJ8NgMgaFAIDQpKDF+wV8nENRbC1CP1zzcvb1QBF4zBL2auDT4fhkhVa817064s7vlDiJVLQ==
+      integrity: sha512-gO8Bs/QcKDn7ncc2f2fIOTPx2AiZKrGj4us1Yxu6mBU8JZqMQRl9XjDMFAUECJQvquBAta+TFJyYj71ZedeQUQ==
   /abbrev/1.1.1:
     dev: true
     resolution:
@@ -606,6 +607,12 @@ packages:
       node: '>=0.8.0'
     resolution:
       integrity: sha1-G2HAViGQqN/2rjuyzwIAyhMLhtQ=
+  /esm/3.2.25:
+    dev: false
+    engines:
+      node: '>=6'
+    resolution:
+      integrity: sha512-U1suiZ2oDVWv4zPO56S0NcR5QriEahGtdN2OR6FiOG4WJvcjBVFB0qI4+eKoWFH483PKGuLuu6V8Z4T5g63UVA==
   /etag/1.8.1:
     dev: false
     engines:
@@ -2211,10 +2218,10 @@ packages:
     dev: true
     resolution:
       integrity: sha1-2pN/emLiH+wf0Y1Js1wpNQZ6bHI=
-  /url-join/4.0.0:
+  /url-join/4.0.1:
     dev: false
     resolution:
-      integrity: sha1-TTNA6AfTdzvamZH4MFrNzCpmXSo=
+      integrity: sha512-jk1+QP6ZJqyOiuEI9AEWQfju/nB2Pw466kbA0LEZljHwKeMgd9WrAEgEGxjPDD2+TNbbb37rTyhEfrCXfuKXnA==
   /url-parse-lax/1.0.0:
     dependencies:
       prepend-http: 1.0.4
@@ -2297,11 +2304,12 @@ registry: 'https://registry.npmjs.org/'
 shrinkwrapMinorVersion: 9
 shrinkwrapVersion: 3
 specifiers:
-  '@sentry/node': ^5.4.3
+  '@sentry/node': ^5.5.0
   chance: ^1.0.18
+  esm: ^3.2.25
   express: ^4.17.1
   is-url: ^1.2.4
   nodemon: ^1.19.1
   request: ^2.88.0
   request-promise: ^4.2.4
-  url-join: ^4.0.0
+  url-join: ^4.0.1

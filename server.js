@@ -1,16 +1,16 @@
 // Packages
-const express = require("express")
+import express from "express"
 const app = express()
-const path = require("path")
-const joinurl = require("url-join")
-const Sentry = require('@sentry/node');
+import path from "path"
+import joinurl from "url-join"
+import * as Sentry from "@sentry/node"
 
 // Constants
 const origin = "https://ros-url-shortener.glitch.me"
 const PORT = process.env.PORT || 80
 
 // Concurrency
-const cluster = require('cluster');
+import cluster from "cluster"
 const numCPUs = require('os').cpus().length;
 
 Sentry.init({ dsn: 'https://0df9f3fb072449879fe3769ed9d8cf18@sentry.io/1493463' });
@@ -32,23 +32,20 @@ app.use(express.json())
 // Match website request
 app.get("/", (_req, res) => res.sendFile(path.join(__dirname, "index.html")))
 
-// Match creation request
+// v3: Match creation request
 app.post("/api/", require("./routes/create"))
 
-// v2: Match creation request
+// LEGACY v2: Match creation request
 app.post("/api/:url", (req, res) => res.redirect(308, joinurl("/", "api", `?url=${req.params.url}`)))
 
-// v1: Match creation request
+// LEGACY v1: Match creation request
 app.get("/new/:url", (req, res) => res.redirect(308, joinurl("/", "api", `?url=${req.params.url}`)))
 
-// Match lookup request
-app.get("/api/*", require("./routes/lookup"))
+// v3: Match lookup request
+app.get("/api/", require("./routes/lookup"))
 
-// v1: Match deprecated lookup request
-app.get("/get/*", (req, res) => res.redirect(308, joinurl(origin, "api", req.path.substr(5))))
-
-// v1: Match deprecated lookup request
-app.get("/get/*", (req, res) => res.redirect(308, joinurl(origin, "api", req.path.substr(5))))
+// LEGACY v1: Match deprecated lookup request
+app.get("/get/:url", (req, res) => res.redirect(308, joinurl("/", "api", `?id=${req.params.url}`)))
 
 // Match api documentation request
 app.use("/api.yaml", express.static(path.join(__dirname, "api.yaml")));

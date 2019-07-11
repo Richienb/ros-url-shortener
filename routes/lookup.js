@@ -3,7 +3,7 @@ const endpoint = process.env.ENDPOINT
 const joinurl = require("url-join")
 
 module.exports = (req, res) => {
-    request(joinurl(endpoint, req.query.url))
+    request(joinurl(endpoint, req.query.id))
         .then(({result, ok}) => {
             if (!ok) res.status(502).json({
                     "success": false,
