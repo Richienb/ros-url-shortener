@@ -12,13 +12,19 @@ const PORT = process.env.PORT || 80
 // Concurrency
 import concurrency from "./utils/concurrency"
 
-Sentry.init({ dsn: 'https://0df9f3fb072449879fe3769ed9d8cf18@sentry.io/1493463' });
+Sentry.init({ dsn: 'https://0df9f3fb072449879fe3769ed9d8cf18@sentry.io/1493463' })
 
 // Sentry request handling
-app.use(Sentry.Handlers.requestHandler());
+app.use(Sentry.Handlers.requestHandler())
 
 // Disable CORS
 app.use(require("./middleware/cors"))
+
+// Compression
+app.use(require("compression")())
+app.use(require("express-minify")({
+  cache: require('os').tmpdir()
+}))
 
 // Parse URL-encoded bodies (as sent by HTML forms)
 app.use(express.urlencoded({

@@ -15,7 +15,9 @@
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
     "url-join": "^4.0.1",
-    "esm": "^3.2.25"
+    "esm": "^3.2.25",
+    "compression": "^1.7.4",
+    "express-minify": "^1.0.0"
   },
   "engines": {
     "node": ">=10.x.x"
