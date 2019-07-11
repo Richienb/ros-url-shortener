@@ -5,6 +5,7 @@ import joinurl from "url-join"
 module.exports = (req, res) => {
     // Match naked api request
     if(!req.query.id) return res.redirect(308, "https://api-docs.richie-bendall.ml/#https://ros-url-shortener.glitch.me/api.yaml")
+
     request(joinurl(endpoint, req.query.id))
         .then(({result, ok}) => {
             if (!ok) res.status(502).json({

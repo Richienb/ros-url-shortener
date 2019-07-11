@@ -1,5 +1,5 @@
 paths:
-  /{QUERY}:
+  /:
     get:
       operationId: 'Lookup ID'
       summary: 'Lookup the URL associated with an ID.'
@@ -10,7 +10,7 @@ paths:
             x-oad-type: object
             type: object
             properties:
-              success: 
+              success:
                 x-oad-type: boolean
                 type: boolean
                 title: 'If the operation succeeded.'
@@ -67,9 +67,9 @@ paths:
           x-oad-type: response
       parameters:
         -
-          name: QUERY
-          in: path
-          description: 'The ID to look up'
+          name: id
+          in: query
+          description: 'The ID to look up.'
           required: true
           type: integer
           format: int32
@@ -154,10 +154,17 @@ paths:
           x-oad-type: response
       parameters:
         -
-          name: QUERY
-          in: path
-          description: 'The URL to shorten'
+          name: url
+          in: query
+          description: 'The URL to shorten.'
           required: true
+          type: string
+          x-oad-type: parameter
+        -
+          name: id
+          in: query
+          description: 'An optional ID to use instead of a randomly generated one.'
+          required: false
           type: string
           x-oad-type: parameter
     x-oad-type: operation
@@ -175,11 +182,11 @@ info:
     url: 'https://mit-license.org'
 host: link.richie-bendall.ml
 basePath: /api
-schemes: [
-  https
-]
+schemes:
+  - https
 consumes:
   - application/x-www-form-urlencoded
+  - application/json
 produces:
   - application/json
 swagger: '2.0'
