@@ -2,11 +2,11 @@ import request from "../utils/request"
 const endpoint = process.env.ENDPOINT
 import joinurl from "url-join"
 import isurl from "is-url"
-const chance = require("chance").Chance();
+import randString from "../utils/randString"
 const origin = "https://ros-url-shortener.glitch.me"
 
 const genId = (notin) => {
-    const str = chance.string({
+    const str = randString.string({
         length: 5,
         pool: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
     });

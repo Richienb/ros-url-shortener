@@ -12,7 +12,7 @@ export default (cb) => {
         }, () => cluster.fork());
 
         // When worker closed
-        cluster.on('exit', worker => {
+        cluster.on("exit", worker => {
             console.log(`❌ Worker ${worker.process.pid} died.`);
         });
     } else {
