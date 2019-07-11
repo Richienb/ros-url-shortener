@@ -47,16 +47,13 @@ app.post("/api/:url", (req, res) => res.redirect(308, joinurl("/", "api", `?url=
 app.get("/new/:url", (req, res) => res.redirect(308, joinurl("/", "api", `?url=${req.params.url}`)))
 
 // v3: Match lookup request
-app.get("/api/", require("./routes/lookup"))
+app.get("/api", require("./routes/lookup"))
 
 // LEGACY v1: Match deprecated lookup request
 app.get("/get/:url", (req, res) => res.redirect(308, joinurl("/", "api", `?id=${req.params.url}`)))
 
 // Match api documentation request
 app.use("/api.yaml", express.static(path.join(__dirname, "api.yaml")));
-
-// Match naked api request
-app.get("/api", (_req, res) => res.redirect(308, "https://api-docs.richie-bendall.ml/#https://ros-url-shortener.glitch.me/api.yaml"))
 
 // Match navigation request
 app.get("/:id", require("./routes/nav"))
