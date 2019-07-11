@@ -1,9 +1,9 @@
 const request = require("../utils/request")
 const endpoint = process.env.ENDPOINT
-const joinurl = require("url-join")
+import joinurl from "url-join"
 
-module.exports = (req, res) => {
-    request(joinurl(endpoint, req.path.slice(1)))
+export default (req, res) => {
+    request(joinurl(endpoint, req.params.id))
         .then(({result, ok}) => {
             if (!ok) res.status(502).send("Unable to contact the storage endpoint.")
             else if (!result) res.status(404).send("No match found for short URL!")

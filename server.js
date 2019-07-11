@@ -10,8 +10,7 @@ const origin = "https://ros-url-shortener.glitch.me"
 const PORT = process.env.PORT || 80
 
 // Concurrency
-import cluster from "cluster"
-const numCPUs = require('os').cpus().length;
+import concurrency from "./utils/concurrency"
 
 Sentry.init({ dsn: 'https://0df9f3fb072449879fe3769ed9d8cf18@sentry.io/1493463' });
 
@@ -54,23 +53,13 @@ app.use("/api.yaml", express.static(path.join(__dirname, "api.yaml")));
 app.get("/api", (_req, res) => res.redirect(308, "https://api-docs.richie-bendall.ml/#https://ros-url-shortener.glitch.me/api.yaml"))
 
 // Match navigation request
-app.get("/*", require("./routes/nav"))
+app.get("/:id", require("./routes/nav"))
 
 // Sentry error handling
 app.use(Sentry.Handlers.errorHandler());
 
-// If the current process is the main one
-if (cluster.isMaster) {
-  // Create processes relative to amount of CPUs
-  Array.from({
-    length: numCPUs
-  }, () => cluster.fork());
-
-  // When worker closed
-  cluster.on('exit', worker => {
-    console.log(`❌ Worker ${worker.process.pid} died.`);
-  });
-} else {
-    // Listen for HTTP requests
-    app.listen(PORT, () => console.log(`🚀 on http://localhost:${PORT}`))
-}
+// Launch concurrent processes
+concurrency(() => {
+  // Listen for HTTP requests
+  app.listen(PORT, () => console.log(`🚀 on http://localhost:${PORT}`))
+})
