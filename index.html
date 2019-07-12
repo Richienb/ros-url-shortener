@@ -11,9 +11,12 @@
     <title>ROS URL Shortener</title>
     <meta name="description" content="Just another URL shortener.">
 
-    <link rel="shortcut icon" href="https://cdn.glitch.com/374c46bd-22ab-4f22-8467-9bf444a5a06b%2Ffavicon.ico?1552302718992">
+    <link rel="shortcut icon"
+        href="https://cdn.glitch.com/374c46bd-22ab-4f22-8467-9bf444a5a06b%2Ffavicon.ico?1552302718992">
 
-    <link rel="stylesheet" href="https://unpkg.com/material-components-web@1.1.1/dist/material-components-web.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/material-components-web/3.0.0/material-components-web.min.css"
+        integrity="sha256-sljrYCrrEK55ECAXF6gHxng8RLXHZYpsblwhH4P7bsM=" crossorigin="anonymous" />
 
     <style>
         body {
@@ -23,7 +26,7 @@
             --mdc-theme-on-secondary: #ffffff;
             background-color: #fafafa;
         }
-        
+
         body .ribbon {
             top: 0;
             z-index: -1;
@@ -32,7 +35,7 @@
             height: 10rem;
             position: absolute;
         }
-        
+
         body .main-content {
             background-color: #ffffff;
             border-radius: 4px;
@@ -40,27 +43,27 @@
             padding: 2rem;
             min-height: calc(100vh - 7rem);
         }
-        
+
         body .main-content .theme-toggle {
             position: absolute;
             top: 0.5rem;
             right: 3rem;
         }
-        
+
         body .main-content a {
             color: #3f51b5;
         }
-        
+
         body .main-content::-moz-selection {
             background-color: #3f51b5;
             color: white;
         }
-        
+
         body .main-content::selection {
             background-color: #3f51b5;
             color: white;
         }
-        
+
         body .main-content #carbonads {
             margin-bottom: 1rem;
             float: right;
@@ -72,30 +75,30 @@
             box-sizing: border-box;
             transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
+
         @media only screen and (max-width: 425px) {
             body .main-content #carbonads {
                 width: 100%;
             }
         }
-        
+
         body .main-content #carbonads:hover {
             box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
         }
-        
-        body .main-content #carbonads .carbon-wrap .carbon-img > img {
+
+        body .main-content #carbonads .carbon-wrap .carbon-img>img {
             margin-right: 9px;
             float: left;
         }
-        
+
         @media only screen and (max-width: 400px) {
-            body .main-content #carbonads .carbon-wrap .carbon-img > img {
+            body .main-content #carbonads .carbon-wrap .carbon-img>img {
                 width: auto;
                 max-width: 130px;
                 height: 50px;
             }
         }
-        
+
         body .main-content #carbonads .carbon-wrap .carbon-text {
             color: #637381;
             font-weight: 300;
@@ -106,7 +109,7 @@
             margin-top: 8px;
             text-decoration: none;
         }
-        
+
         body .main-content #carbonads .carbon-poweredby {
             color: #c5cdd0;
             font-size: 8px;
@@ -115,86 +118,86 @@
             text-transform: uppercase;
             text-decoration: none;
         }
-        
+
         body .main-content .full-width {
             width: 100%;
         }
-        
+
         body .main-content .mdc-button--raised {
             background-color: #f44336;
         }
-        
+
         body .main-content .fixed-bottom {
             position: fixed;
             bottom: 0;
         }
-        
+
         body .main-content .shorten--list {
             display: none;
         }
-        
+
         body .main-content .shorten--url-copy {
             top: 4px;
         }
-        
+
         body .main-content .shorten--list-url-copy,
         body .main-content .shorten--list-id-copy {
             right: 0px;
             position: fixed;
         }
-        
+
         body.setting--dark {
-            background-color: #212121 !important;
+            background-color: #121212 !important;
             --mdc-theme-text-primary-on-background: white;
             --mdc-theme-text-secondary-on-background: white;
             --mdc-theme-text-icon-on-background: white;
         }
-        
+
         body.setting--dark .main-content {
             color: white;
-            background-color: #303030;
+            background-color: #212121;
         }
-        
+
         body.setting--dark .main-content .mdc-text-field:not(.mdc-text-field--disabled) .mdc-text-field__input,
         body.setting--dark .main-content .mdc-text-field:not(.mdc-text-field--disabled) .mdc-floating-label {
             color: white;
         }
-        
+
         body.setting--dark .main-content .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__leading,
         body.setting--dark .main-content .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__notch,
         body.setting--dark .main-content .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__trailing {
             border-color: white;
         }
-        
+
         body.setting--dark .main-content #carbonads .carbon-text {
             color: white !important;
         }
-        
+
         body.setting--dark .main-content a {
             color: #5c6bc0;
         }
-        
+
         body.setting--dark .main-content::-moz-selection {
             background-color: #c5cae9;
             color: black;
         }
-        
+
         body.setting--dark .main-content::selection {
             background-color: #c5cae9;
             color: black;
         }
-        
+
         body.setting--animate-colours {
             transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
+
         body.setting--animate-colours .main-content,
         body.setting--animate-colours a,
         body.setting--animate-colours::-moz-selection {
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             transition-property: background-color, color;
         }
-        
+
         body.setting--animate-colours .main-content,
         body.setting--animate-colours a,
         body.setting--animate-colours::selection {
@@ -204,7 +207,8 @@
     </style>
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
+        integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
 
 </head>
 
@@ -212,11 +216,14 @@
 
     <div class="ribbon mdc-elevation--z4"></div>
     <main class="main-content mdc-typography mdc-elevation--z8">
-        <script async src="https://cdn.carbonads.com/carbon.js?serve=CK7I6K3E&amp;placement=wwwrichie-bendallml" id="_carbonads_js"></script>
+        <script async src="https://cdn.carbonads.com/carbon.js?serve=CK7I6K3E&amp;placement=wwwrichie-bendallml"
+            id="_carbonads_js"></script>
         <button class="theme-toggle mdc-fab mdc-fab--mini" aria-label="Toggle theme" data-mdc-auto-init="MDCRipple">
-            <svg class="theme-toggle--svg mdc-fab__icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <svg class="theme-toggle--svg mdc-fab__icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                viewBox="0 0 24 24">
                 <path fill="none" d="M0 0h24v24H0V0z" />
-                <path d="M11 7l-3.2 9h1.9l.7-2h3.2l.7 2h1.9L13 7h-2zm-.15 5.65L12 9l1.15 3.65h-2.3zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69zm-2 5.79V18h-3.52L12 20.48 9.52 18H6v-3.52L3.52 12 6 9.52V6h3.52L12 3.52 14.48 6H18v3.52L20.48 12 18 14.48z" />
+                <path
+                    d="M11 7l-3.2 9h1.9l.7-2h3.2l.7 2h1.9L13 7h-2zm-.15 5.65L12 9l1.15 3.65h-2.3zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69zm-2 5.79V18h-3.52L12 20.48 9.52 18H6v-3.52L3.52 12 6 9.52V6h3.52L12 3.52 14.48 6H18v3.52L20.48 12 18 14.48z" />
             </svg>
         </button>
         <h1 class="mdc-typography--headline2">ROS URL Shortener</h1>
@@ -224,7 +231,8 @@
             <p>
                 <h2 class="mdc-typography--headline3">Shorten</h2>
                 <form class="shorten--form" action="#">
-                    <div class="shorten--url mdc-text-field mdc-text-field--outlined full-width" data-mdc-auto-init="MDCTextField">
+                    <div class="shorten--url mdc-text-field mdc-text-field--outlined full-width"
+                        data-mdc-auto-init="MDCTextField">
                         <input type="url" id="shorten--url" autocomplete="off" class="mdc-text-field__input" required>
                         <div class="mdc-notched-outline">
                             <div class="mdc-notched-outline__leading"></div>
@@ -234,18 +242,23 @@
                             <div class="mdc-notched-outline__trailing"></div>
                         </div>
                         <button class="mdc-icon-button shorten--url-copy" data-mdc-auto-init="MDCRipple">
-                            <svg class="mdc-icon-button__icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <svg class="mdc-icon-button__icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24">
                                 <path fill="none" d="M0 0h24v24H0V0z" />
-                                <path d="M19,20H5V4H7V7H17V4H19M12,2A1,1 0 0,1 13,3A1,1 0 0,1 12,4A1,1 0 0,1 11,3A1,1 0 0,1 12,2M19,2H14.82C14.4,0.84 13.3,0 12,0C10.7,0 9.6,0.84 9.18,2H5A2,2 0 0,0 3,4V20A2,2 0 0,0 5,22H19A2,2 0 0,0 21,20V4A2,2 0 0,0 19,2Z" />
+                                <path
+                                    d="M19,20H5V4H7V7H17V4H19M12,2A1,1 0 0,1 13,3A1,1 0 0,1 12,4A1,1 0 0,1 11,3A1,1 0 0,1 12,2M19,2H14.82C14.4,0.84 13.3,0 12,0C10.7,0 9.6,0.84 9.18,2H5A2,2 0 0,0 3,4V20A2,2 0 0,0 5,22H19A2,2 0 0,0 21,20V4A2,2 0 0,0 19,2Z" />
                             </svg>
                         </button>
 
                     </div>
                     <br>
                     <br>
-                    <button class="shorten--button mdc-button mdc-button--raised" type="submit" data-mdc-auto-init="MDCRipple">
+                    <button class="shorten--button mdc-button mdc-button--raised" type="submit"
+                        data-mdc-auto-init="MDCRipple">
                         <span class="mdc-button__label">Shorten URL</span>
-                        <div role="progressbar" class="shorten--progress fixed-bottom mdc-linear-progress mdc-linear-progress--indeterminate mdc-linear-progress--closed" data-mdc-auto-init="MDCLinearProgress">
+                        <div role="progressbar"
+                            class="shorten--progress fixed-bottom mdc-linear-progress mdc-linear-progress--indeterminate mdc-linear-progress--closed"
+                            data-mdc-auto-init="MDCLinearProgress">
                             <div class="mdc-linear-progress__buffering-dots"></div>
                             <div class="mdc-linear-progress__buffer"></div>
                             <div class="mdc-linear-progress__bar mdc-linear-progress__primary-bar">
@@ -259,41 +272,52 @@
                 </form>
                 <ul class="mdc-list mdc-list--two-line shorten--list">
                     <li class="mdc-list-item" tabindex="0">
-                        <svg class="mdc-list-item__graphic" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <svg class="mdc-list-item__graphic" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24">
                             <path fill="none" d="M0 0h24v24H0V0z" />
-                            <path d="M17 7h-4v2h4c1.65 0 3 1.35 3 3s-1.35 3-3 3h-4v2h4c2.76 0 5-2.24 5-5s-2.24-5-5-5zm-6 8H7c-1.65 0-3-1.35-3-3s1.35-3 3-3h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-2zm-3-4h8v2H8z" />
+                            <path
+                                d="M17 7h-4v2h4c1.65 0 3 1.35 3 3s-1.35 3-3 3h-4v2h4c2.76 0 5-2.24 5-5s-2.24-5-5-5zm-6 8H7c-1.65 0-3-1.35-3-3s1.35-3 3-3h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-2zm-3-4h8v2H8z" />
                         </svg>
                         <span class="mdc-list-item__text">
-      <span class="mdc-list-item__primary-text">Your URL</span>
-                        <span class="mdc-list-item__secondary-text shorten--result-url"></span>
+                            <span class="mdc-list-item__primary-text">Your URL</span>
+                            <span class="mdc-list-item__secondary-text shorten--result-url"></span>
                         </span>
-                        <button class="mdc-icon-button shorten--list-url-copy" data-clipboard-target=".shorten--result-url" data-mdc-auto-init="MDCRipple">
-                            <svg class="mdc-icon-button__icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <button class="mdc-icon-button shorten--list-url-copy"
+                            data-clipboard-target=".shorten--result-url" data-mdc-auto-init="MDCRipple">
+                            <svg class="mdc-icon-button__icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24">
                                 <path fill="none" d="M0 0h24v24H0V0z" />
-                                <path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+                                <path
+                                    d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
                             </svg>
                         </button>
                     </li>
                     <li class="mdc-list-item">
-                        <svg class="mdc-list-item__graphic" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <svg class="mdc-list-item__graphic" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24">
                             <path fill="none" d="M0 0h24v24H0V0z" />
-                            <path d="M2 17h2v.5H3v1h1v.5H2v1h3v-4H2v1zm1-9h1V4H2v1h1v3zm-1 3h1.8L2 13.1v.9h3v-1H3.2L5 10.9V10H2v1zm5-6v2h14V5H7zm0 14h14v-2H7v2zm0-6h14v-2H7v2z" />
+                            <path
+                                d="M2 17h2v.5H3v1h1v.5H2v1h3v-4H2v1zm1-9h1V4H2v1h1v3zm-1 3h1.8L2 13.1v.9h3v-1H3.2L5 10.9V10H2v1zm5-6v2h14V5H7zm0 14h14v-2H7v2zm0-6h14v-2H7v2z" />
                         </svg>
                         <span class="mdc-list-item__text">
-      <span class="mdc-list-item__primary-text">Your ID</span>
-                        <span class="mdc-list-item__secondary-text shorten--result-id"></span>
+                            <span class="mdc-list-item__primary-text">Your ID</span>
+                            <span class="mdc-list-item__secondary-text shorten--result-id"></span>
                         </span>
-                        <button class="mdc-icon-button shorten--list-id-copy" data-clipboard-target=".shorten--result-id" data-mdc-auto-init="MDCRipple">
-                            <svg class="mdc-icon-button__icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <button class="mdc-icon-button shorten--list-id-copy"
+                            data-clipboard-target=".shorten--result-id" data-mdc-auto-init="MDCRipple">
+                            <svg class="mdc-icon-button__icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24">
                                 <path fill="none" d="M0 0h24v24H0V0z" />
-                                <path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+                                <path
+                                    d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
                             </svg>
                         </button>
                     </li>
                 </ul>
                 <h2 class="mdc-typography--headline3">Bookmarklet</h2>
                 <p class="mdc-typography--body1">Drag the following button to your bookmarks bar.</p>
-                <a href="javascript:window.open(%22https://ros-url-shortener.glitch.me%23%22+window.location.href)" class="mdc-button mdc-button--outlined" data-mdc-auto-init="MDCRipple">
+                <a href="javascript:window.open(%22https://ros-url-shortener.glitch.me%23%22+window.location.href)"
+                    class="mdc-button mdc-button--outlined" data-mdc-auto-init="MDCRipple">
                     <span class="mdc-button__label">ROS URL Shortener</span>
                 </a>
                 <h2 class="mdc-typography--headline3">For developers</h2>
@@ -301,9 +325,9 @@
                     <span class="mdc-button__label">Official Documentation</span>
                 </a>
                 <!-- UNCOMMENT THESE LINES WHEN ADAPTING FOR YOUR OWN PROJECT
-        <h2 class="mdc-typography--headline3">Credit</h2>
-        <p class="mdc-typography--body1">Created by Richie Bendall and licensed under the MIT License</p>
-        -->
+                <h2 class="mdc-typography--headline3">Credit</h2>
+                <p class="mdc-typography--body1">Created by Richie Bendall and licensed under the MIT License</p>
+                -->
                 <div class="main--snackbar mdc-snackbar mdc-snackbar--leading" data-mdc-auto-init="MDCSnackbar">
                     <div class="mdc-snackbar__surface">
                         <div class="mdc-snackbar__label" role="status" aria-live="polite">
@@ -312,20 +336,24 @@
                 </div>
     </main>
 
-    <script async src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
-    <script src="https://unpkg.com/material-components-web@1.1.1/dist/material-components-web.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js"></script>
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"
+        integrity="sha256-1eSvllkLdrfxD6G8RGF9h+mQuD93Af5+GdPBMNc7uMQ=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/material-components-web/3.0.0/material-components-web.min.js"
+        integrity="sha256-EsosgypLTQhhyhYTy8y+WbACaQsmG2Tpvoq1186sISE=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js"
+        integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
     <script>
         mdc.autoInit();
 
-        $(".mdc-icon-button[data-mdc-auto-init=\"MDCRipple\"]").each(function(_, _ref) {
+        $(".mdc-icon-button[data-mdc-auto-init=\"MDCRipple\"]").each(function (_, _ref) {
             var MDCRipple = _ref.MDCRipple;
             return MDCRipple.unbounded = true;
         });
 
-        Array.prototype.cycle = function(str) {
+        Array.prototype.cycle = function (str) {
             var i = this.indexOf(str);
             if (i === -1) return undefined;
             return this[(i + 1) % this.length];
@@ -353,7 +381,7 @@
         if (["auto", "light", "dark"].indexOf(localStorage.getItem("theme")) === -1) localStorage.setItem("theme", "auto");
         handleTheme();
         $("body").addClass("setting--animate-colours");
-        $(".theme-toggle").click(function() {
+        $(".theme-toggle").click(function () {
             localStorage.setItem("theme", ["auto", "light", "dark"].cycle(localStorage.getItem("theme")));
             handleTheme();
         });
@@ -366,14 +394,14 @@
 
         var clipa = new ClipboardJS(".shorten--list-url-copy");
         var clipb = new ClipboardJS(".shorten--list-id-copy");
-        $(".shorten--form").on("submit", function(e) {
+        $(".shorten--form").on("submit", function (e) {
             e.preventDefault();
             $(".shorten--list").hide();
             $(".shorten--progress").get(0).MDCLinearProgress.open();
             $(".shorten--button").prop("disabled", true);
             $(".shorten--url-copy").prop("disabled", true);
             $(".shorten--url").get(0).MDCTextField.disabled = true;
-            $.post("https://ros-url-shortener.glitch.me/api/".concat($(".shorten--url").get(0).MDCTextField.value), function(data) {
+            $.post("https://ros-url-shortener.glitch.me/api/".concat($(".shorten--url").get(0).MDCTextField.value), function (data) {
                 if (data.success === false) {
                     snackBarMessage("An error occurred while generating a short URL: ".concat(data.message));
                 } else if (data.new === true) {
@@ -397,29 +425,29 @@
             $(".shorten--button").click();
         }
 
-        $(".shorten--url-copy").click(function() {
-            navigator.clipboard.readText().then(function(text) {
+        $(".shorten--url-copy").click(function () {
+            navigator.clipboard.readText().then(function (text) {
                 if (!$(".shorten--url-copy").prop("disabled")) $(".shorten--url").get(0).MDCTextField.value = text;
-            }).catch(function(err) {
+            }).catch(function (err) {
                 console.error("Failed to read clipboard contents: ", err);
             });
         });
-      
-        clipa.on("success", function(e) {
+
+        clipa.on("success", function (e) {
             snackBarMessage("Successfully copied URL to clipboard.");
             e.clearSelection();
         });
-      
-        clipa.on("error", function(e) {
+
+        clipa.on("error", function (e) {
             snackBarMessage("Unable to copy URL to clipboard.");
         });
-      
-        clipb.on("success", function(e) {
+
+        clipb.on("success", function (e) {
             snackBarMessage("Successfully copied ID to clipboard.");
             e.clearSelection();
         });
-      
-        clipb.on("error", function(e) {
+
+        clipb.on("error", function (e) {
             snackBarMessage("Unable to copy ID to clipboard.");
         });
     </script>
